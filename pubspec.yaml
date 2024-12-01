@@ -7,26 +7,29 @@ environment:
   sdk: ^3.5.4
 
 dependencies:
-  flutter:
-    sdk: flutter
   authentication_repository:
     path: packages/authentication_repository
   bloc: ^8.1.0
   equatable: ^2.0.3
-  formz: ^0.6.0
-  user_repository:
-    path: packages/user_repository
+  firebase_core: ^3.0.0
+  flow_builder: ^0.1.0
+  flutter:
+    sdk: flutter
   flutter_bloc: ^8.1.1
-  firebase_core: ^3.8.0
-  firebase_auth: ^5.3.3
-  google_sign_in: ^6.2.2
-  flutter_signin_button: ^2.0.0
+  font_awesome_flutter: ^10.1.0
+  form_inputs:
+    path: packages/form_inputs
+  formz: ^0.7.0
+  google_fonts: ^6.2.1
+  meta: ^1.15.0
 
 dev_dependencies:
   bloc_test: ^9.0.0
   flutter_test:
     sdk: flutter
-  flutter_lints: ^5.0.0
+  mocktail: ^1.0.0
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/

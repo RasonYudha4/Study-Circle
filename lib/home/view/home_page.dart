@@ -1,51 +1,43 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:study_circle/authentication/authentication.dart';
-import 'package:study_circle/authentication/bloc/authentication_bloc.dart';
+import 'package:study_circle/app/app.dart';
+import 'package:study_circle/home/home.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
-  static Route<void> route() {
-    return MaterialPageRoute<void>(builder: (_) => const HomePage());
-  }
+  static Page<void> page() => const MaterialPage<void>(child: HomePage());
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
+    final textTheme = Theme.of(context).textTheme;
+    final user = context.select((AppBloc bloc) => bloc.state.user);
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Home'),
+        actions: <Widget>[
+          IconButton(
+            key: const Key('homePage_logout_iconButton'),
+            icon: const Icon(Icons.exit_to_app),
+            onPressed: () {
+              context.read<AppBloc>().add(const AppLogoutPressed());
+            },
+          ),
+        ],
+      ),
+      body: Align(
+        alignment: const Alignment(0, -1 / 3),
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          children: [_UserId(), _LogoutButton()],
+          children: <Widget>[
+            Avatar(photo: user.photo),
+            const SizedBox(height: 4),
+            Text(user.email ?? '', style: textTheme.titleLarge),
+            const SizedBox(height: 4),
+            Text(user.name ?? '', style: textTheme.headlineSmall),
+          ],
         ),
       ),
     );
-  }
-}
-
-class _LogoutButton extends StatelessWidget {
-  const _LogoutButton();
-
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-      child: const Text('Logout'),
-      onPressed: () {
-        context.read<AuthenticationBloc>().add(AuthenticationLogoutPressed());
-      },
-    );
-  }
-}
-
-class _UserId extends StatelessWidget {
-  const _UserId();
-
-  @override
-  Widget build(BuildContext context) {
-    final userId = context.select(
-      (AuthenticationBloc bloc) => bloc.state.user.id,
-    );
-
-    return Text('UserID: $userId');
   }
 }
