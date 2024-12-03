@@ -38,6 +38,26 @@ class HomePage extends StatelessWidget {
           ],
         ),
       ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: <BottomNavigationBarItem>[
+          const BottomNavigationBarItem(
+            icon: Icon(Icons.call),
+            label: 'Calls',
+          ),
+          const BottomNavigationBarItem(
+            icon: Icon(Icons.camera),
+            label: 'Camera',
+          ),
+          BottomNavigationBarItem(
+            icon: Image.asset(
+              'assets/images/graduation-cap.png',
+              width: 24,
+              height: 24,
+            ),
+            label: 'Chats',
+          ),
+        ],
+      ),
     );
   }
 }

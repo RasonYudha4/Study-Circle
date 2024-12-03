@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:study_circle/app/app.dart';
 import 'package:study_circle/home/home.dart';
-import 'package:study_circle/cubit/login.dart';
+import 'package:study_circle/login/login.dart';
 
 List<Page<dynamic>> onGenerateAppViewPages(
   AppStatus state,
