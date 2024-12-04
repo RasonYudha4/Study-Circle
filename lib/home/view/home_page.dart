@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:study_circle/app/app.dart';
 import 'package:study_circle/home/home.dart';
+import 'package:study_circle/notification/view/notication_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -64,7 +65,16 @@ class HomePage extends StatelessWidget {
                           borderRadius: BorderRadius.circular(15),
                           color: Color(0xFF10403B).withOpacity(0.1)),
                       child: IconButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute<void>(
+                                builder: (BuildContext context) {
+                                  return const NotificationPage();
+                                },
+                              ),
+                            );
+                          },
                           icon: const Icon(
                             Icons.notifications,
                             size: 28,
@@ -75,6 +85,9 @@ class HomePage extends StatelessWidget {
                 ),
               ],
             ),
+          ),
+          SizedBox(
+            height: 15,
           ),
         ],
       ),
