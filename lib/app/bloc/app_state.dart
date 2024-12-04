@@ -1,9 +1,7 @@
 part of 'app_bloc.dart';
 
 enum AppStatus {
-  authenticatedHome,
-  authenticatedProfile,
-  authenticatedClass,
+  authenticated,
   unauthenticated,
 }
 
@@ -13,7 +11,7 @@ final class AppState extends Equatable {
           status: user == User.empty
               ? AppStatus.unauthenticated
               : status ??
-                  AppStatus.authenticatedHome, // Default page status to Home
+                  AppStatus.authenticated, // Default page status to Home
           user: user,
         );
 

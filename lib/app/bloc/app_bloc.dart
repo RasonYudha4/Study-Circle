@@ -13,9 +13,6 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         super(AppState(user: authenticationRepository.currentUser)) {
     on<AppUserSubscriptionRequested>(_onUserSubscriptionRequested);
     on<AppLogoutPressed>(_onLogoutPressed);
-    on<HomeIconPressed>(_onHomeIconPressed);
-    on<ClassIconPressed>(_onClassIconPressed);
-    on<ProfileIconPressed>(_onProfileIconPressed);
   }
 
   final AuthenticationRepository _authenticationRepository;
@@ -36,26 +33,5 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     Emitter<AppState> emit,
   ) {
     _authenticationRepository.logOut();
-  }
-
-  void _onHomeIconPressed(
-    HomeIconPressed event,
-    Emitter<AppState> emit,
-  ) {
-    emit(AppState(user: state.user, status: AppStatus.authenticatedHome));
-  }
-
-  void _onClassIconPressed(
-    ClassIconPressed event,
-    Emitter<AppState> emit,
-  ) {
-    emit(AppState(user: state.user, status: AppStatus.authenticatedClass));
-  }
-
-  void _onProfileIconPressed(
-    ProfileIconPressed event,
-    Emitter<AppState> emit,
-  ) {
-    emit(AppState(user: state.user, status: AppStatus.authenticatedProfile));
   }
 }
