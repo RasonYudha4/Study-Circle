@@ -14,55 +14,69 @@ class HomePage extends StatelessWidget {
     final user = context.select((AppBloc bloc) => bloc.state.user);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('AppBar Demo'),
-        backgroundColor: Colors.green,
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.add_alert_rounded),
-            tooltip: 'Show Snackbar',
-            onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('This is a snackbar')));
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.navigate_next),
-            tooltip: 'Go to the next page',
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute<void>(
-                builder: (BuildContext context) {
-                  return Scaffold(
-                    appBar: PreferredSize(
-                      preferredSize: Size.fromHeight(60.0),
-                      child: AppBar(
-                          title: Text("Title"), backgroundColor: Colors.blue),
+      backgroundColor: Color(0xFF8AA6A3),
+      body: Column(
+        children: [
+          Container(
+            padding: EdgeInsets.symmetric(vertical: 35, horizontal: 25),
+            alignment: Alignment.bottomCenter,
+            height: 150,
+            decoration: BoxDecoration(color: Color(0xFF127369)),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Study Circle",
+                      style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
                     ),
-                    body: const Center(
-                      child: Text(
-                        'This is the next page',
-                        style: TextStyle(fontSize: 24),
-                      ),
+                    Text(
+                      "Start your productive group now!",
+                      style: TextStyle(fontSize: 15, color: Colors.white),
+                    )
+                  ],
+                ),
+                Row(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          color: Color(0xFF10403B).withOpacity(0.1)),
+                      child: IconButton(
+                          onPressed: () {},
+                          icon: const Icon(
+                            Icons.search,
+                            size: 28,
+                            color: Colors.white,
+                          )),
                     ),
-                  );
-                },
-              ));
-            },
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          color: Color(0xFF10403B).withOpacity(0.1)),
+                      child: IconButton(
+                          onPressed: () {},
+                          icon: const Icon(
+                            Icons.notifications,
+                            size: 28,
+                            color: Colors.white,
+                          )),
+                    )
+                  ],
+                ),
+              ],
+            ),
           ),
         ],
-      ),
-      body: Align(
-        alignment: const Alignment(0, -1 / 3),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Avatar(photo: user.photo),
-            const SizedBox(height: 4),
-            Text(user.email ?? '', style: textTheme.titleLarge),
-            const SizedBox(height: 4),
-            Text(user.name ?? '', style: textTheme.headlineSmall),
-          ],
-        ),
       ),
     );
   }
