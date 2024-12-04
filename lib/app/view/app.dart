@@ -22,7 +22,10 @@ class App extends StatelessWidget {
         create: (_) => AppBloc(
           authenticationRepository: _authenticationRepository,
         )..add(const AppUserSubscriptionRequested()),
-        child: const AppView(),
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          home: AppView(),
+        ),
       ),
     );
   }
@@ -34,7 +37,6 @@ class AppView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
       theme: theme,
       home: FlowBuilder<AppStatus>(
         state: context.select((AppBloc bloc) => bloc.state.status),

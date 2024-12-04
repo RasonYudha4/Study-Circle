@@ -7,11 +7,25 @@ class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   static Page<void> page() => const MaterialPage<void>(child: HomePage());
+  int _getCurrentIndex(AppStatus status) {
+    switch (status) {
+      case AppStatus.authenticatedHome:
+        return 0;
+      case AppStatus.authenticatedClass:
+        return 1;
+      case AppStatus.authenticatedProfile:
+        return 2;
+      case AppStatus.unauthenticated:
+      default:
+        return 0; // Default to home or handle unauthenticated state
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final user = context.select((AppBloc bloc) => bloc.state.user);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Home'),
@@ -39,23 +53,24 @@ class HomePage extends StatelessWidget {
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        items: <BottomNavigationBarItem>[
-          const BottomNavigationBarItem(
-            icon: Icon(Icons.call),
-            label: 'Calls',
-          ),
-          const BottomNavigationBarItem(
-            icon: Icon(Icons.camera),
-            label: 'Camera',
-          ),
-          BottomNavigationBarItem(
-            icon: Image.asset(
-              'assets/images/graduation-cap.png',
-              width: 24,
-              height: 24,
-            ),
-            label: 'Chats',
-          ),
+        currentIndex: _getCurrentIndex(context.read<AppBloc>().state.status),
+        onTap: (index) {
+          switch (index) {
+            case 0:
+              context.read<AppBloc>().add(HomeIconPressed());
+              break;
+            case 1:
+              context.read<AppBloc>().add(ClassIconPressed());
+              break;
+            case 2:
+              context.read<AppBloc>().add(ProfileIconPressed());
+              break;
+          }
+        },
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.class_), label: 'Class'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
       ),
     );
