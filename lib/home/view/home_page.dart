@@ -7,19 +7,6 @@ class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   static Page<void> page() => const MaterialPage<void>(child: HomePage());
-  int _getCurrentIndex(AppStatus status) {
-    switch (status) {
-      case AppStatus.authenticatedHome:
-        return 0;
-      case AppStatus.authenticatedClass:
-        return 1;
-      case AppStatus.authenticatedProfile:
-        return 2;
-      case AppStatus.unauthenticated:
-      default:
-        return 0; // Default to home or handle unauthenticated state
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,13 +15,38 @@ class HomePage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Home'),
+        title: const Text('AppBar Demo'),
+        backgroundColor: Colors.green,
         actions: <Widget>[
           IconButton(
-            key: const Key('homePage_logout_iconButton'),
-            icon: const Icon(Icons.exit_to_app),
+            icon: const Icon(Icons.add_alert_rounded),
+            tooltip: 'Show Snackbar',
             onPressed: () {
-              context.read<AppBloc>().add(const AppLogoutPressed());
+              ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('This is a snackbar')));
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.navigate_next),
+            tooltip: 'Go to the next page',
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute<void>(
+                builder: (BuildContext context) {
+                  return Scaffold(
+                    appBar: PreferredSize(
+                      preferredSize: Size.fromHeight(60.0),
+                      child: AppBar(
+                          title: Text("Title"), backgroundColor: Colors.blue),
+                    ),
+                    body: const Center(
+                      child: Text(
+                        'This is the next page',
+                        style: TextStyle(fontSize: 24),
+                      ),
+                    ),
+                  );
+                },
+              ));
             },
           ),
         ],
@@ -51,27 +63,6 @@ class HomePage extends StatelessWidget {
             Text(user.name ?? '', style: textTheme.headlineSmall),
           ],
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _getCurrentIndex(context.read<AppBloc>().state.status),
-        onTap: (index) {
-          switch (index) {
-            case 0:
-              context.read<AppBloc>().add(HomeIconPressed());
-              break;
-            case 1:
-              context.read<AppBloc>().add(ClassIconPressed());
-              break;
-            case 2:
-              context.read<AppBloc>().add(ProfileIconPressed());
-              break;
-          }
-        },
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.class_), label: 'Class'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-        ],
       ),
     );
   }

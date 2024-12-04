@@ -7,19 +7,6 @@ class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
 
   static Page<void> page() => const MaterialPage<void>(child: ProfilePage());
-  int _getCurrentIndex(AppStatus status) {
-    switch (status) {
-      case AppStatus.authenticatedHome:
-        return 0;
-      case AppStatus.authenticatedClass:
-        return 1;
-      case AppStatus.authenticatedProfile:
-        return 2;
-      case AppStatus.unauthenticated:
-      default:
-        return 0; // Default to home or handle unauthenticated state
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,27 +38,6 @@ class ProfilePage extends StatelessWidget {
             Text(user.name ?? '', style: textTheme.headlineSmall),
           ],
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _getCurrentIndex(context.read<AppBloc>().state.status),
-        onTap: (index) {
-          switch (index) {
-            case 0:
-              context.read<AppBloc>().add(HomeIconPressed());
-              break;
-            case 1:
-              context.read<AppBloc>().add(ClassIconPressed());
-              break;
-            case 2:
-              context.read<AppBloc>().add(ProfileIconPressed());
-              break;
-          }
-        },
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.class_), label: 'Class'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-        ],
       ),
     );
   }
