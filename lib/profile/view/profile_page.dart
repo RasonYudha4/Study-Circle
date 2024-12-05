@@ -14,30 +14,62 @@ class ProfilePage extends StatelessWidget {
     final user = context.select((AppBloc bloc) => bloc.state.user);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Home'),
-        actions: <Widget>[
-          IconButton(
-            key: const Key('homePage_logout_iconButton'),
-            icon: const Icon(Icons.exit_to_app),
-            onPressed: () {
+      body: Column(
+        children: [
+          Container(
+            padding: EdgeInsets.only(top: 80),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Avatar(photo: user.photo),
+                const SizedBox(height: 4),
+                Text(user.email ?? '', style: textTheme.titleLarge),
+                const SizedBox(height: 4),
+                Text(user.name ?? '', style: textTheme.headlineSmall),
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 40,
+          ),
+          GestureDetector(
+            onTap: () {
               context.read<AppBloc>().add(const AppLogoutPressed());
             },
-          ),
+            child: Container(
+              height: 80,
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              decoration: BoxDecoration(
+                  border: Border(
+                      bottom: BorderSide(color: Colors.black, width: 0.5))),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.logout_outlined,
+                        color: Color(0xFF10403B),
+                      ),
+                      const SizedBox(
+                        width: 20,
+                      ),
+                      const Text(
+                        "Log Out",
+                        style: TextStyle(fontSize: 18),
+                      )
+                    ],
+                  ),
+                  Icon(
+                    Icons.chevron_right_outlined,
+                    color: Color(0xFF10403B),
+                    size: 30,
+                  )
+                ],
+              ),
+            ),
+          )
         ],
-      ),
-      body: Align(
-        alignment: const Alignment(0, -1 / 3),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Avatar(photo: user.photo),
-            const SizedBox(height: 4),
-            Text(user.email ?? '', style: textTheme.titleLarge),
-            const SizedBox(height: 4),
-            Text(user.name ?? '', style: textTheme.headlineSmall),
-          ],
-        ),
       ),
     );
   }
