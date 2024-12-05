@@ -14,31 +14,51 @@ class ClassPage extends StatelessWidget {
     final user = context.select((AppBloc bloc) => bloc.state.user);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Home'),
-        actions: <Widget>[
-          IconButton(
-            key: const Key('homePage_logout_iconButton'),
-            icon: const Icon(Icons.exit_to_app),
-            onPressed: () {
-              context.read<AppBloc>().add(const AppLogoutPressed());
-            },
-          ),
-        ],
-      ),
-      body: Align(
-        alignment: const Alignment(0, -1 / 3),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Avatar(photo: user.photo),
-            const SizedBox(height: 4),
-            Text(user.email ?? '', style: textTheme.titleLarge),
-            const SizedBox(height: 4),
-            Text(user.name ?? '', style: textTheme.headlineSmall),
+        backgroundColor: Color(0xFF8AA6A3),
+        body: Column(
+          children: [
+            AppBar(
+              title: Text(
+                'Classes',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              centerTitle: true,
+              backgroundColor: Color(0xFF8AA6A3),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                GestureDetector(
+                  onTap: () {},
+                  child: Container(
+                    height: 40,
+                    width: 110,
+                    alignment: Alignment(0, 0),
+                    child: Text(
+                      "Joined",
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {},
+                  child: Container(
+                    height: 40,
+                    width: 110,
+                    alignment: Alignment(0, 0),
+                    child: Text(
+                      "Conducted",
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ],
-        ),
-      ),
-    );
+        ));
   }
 }

@@ -14,6 +14,7 @@ class ProfilePage extends StatelessWidget {
     final user = context.select((AppBloc bloc) => bloc.state.user);
 
     return Scaffold(
+      backgroundColor: Color(0xFF8AA6A3),
       body: Column(
         children: [
           Container(
@@ -32,44 +33,55 @@ class ProfilePage extends StatelessWidget {
           SizedBox(
             height: 40,
           ),
-          GestureDetector(
-            onTap: () {
-              context.read<AppBloc>().add(const AppLogoutPressed());
-            },
-            child: Container(
-              height: 80,
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              decoration: BoxDecoration(
-                  border: Border(
-                      bottom: BorderSide(color: Colors.black, width: 0.5))),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.logout_outlined,
-                        color: Color(0xFF10403B),
-                      ),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      const Text(
-                        "Log Out",
-                        style: TextStyle(fontSize: 18),
-                      )
-                    ],
-                  ),
-                  Icon(
-                    Icons.chevron_right_outlined,
-                    color: Color(0xFF10403B),
-                    size: 30,
-                  )
-                ],
-              ),
-            ),
-          )
+          LogoutButton()
         ],
+      ),
+    );
+  }
+}
+
+class LogoutButton extends StatelessWidget {
+  const LogoutButton({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        context.read<AppBloc>().add(const AppLogoutPressed());
+      },
+      child: Container(
+        height: 80,
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        decoration: BoxDecoration(
+            border:
+                Border(bottom: BorderSide(color: Colors.black, width: 0.5))),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                Icon(
+                  Icons.logout_outlined,
+                  color: Color(0xFF10403B),
+                ),
+                const SizedBox(
+                  width: 20,
+                ),
+                const Text(
+                  "Log Out",
+                  style: TextStyle(fontSize: 18),
+                )
+              ],
+            ),
+            Icon(
+              Icons.chevron_right_outlined,
+              color: Color(0xFF10403B),
+              size: 30,
+            )
+          ],
+        ),
       ),
     );
   }

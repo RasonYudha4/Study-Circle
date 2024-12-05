@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:study_circle/class/class.dart';
 import 'package:study_circle/home/home.dart';
 import 'package:study_circle/landing_screen/bloc/landing_screen_bloc.dart';
 import 'package:study_circle/profile/profile.dart';
@@ -21,7 +22,7 @@ List<BottomNavigationBarItem> bottomNavItems = const <BottomNavigationBarItem>[
 
 const List<Widget> bottomNavScreen = <Widget>[
   HomePage(),
-  Text('Index 1: Class'),
+  ClassPage(),
   ProfilePage(),
 ];
 
