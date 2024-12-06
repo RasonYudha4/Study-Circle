@@ -1,4 +1,6 @@
+import 'package:barcode_scan2/barcode_scan2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:study_circle/app/app.dart';
 import 'package:study_circle/class/bloc/selected_bloc.dart';
@@ -111,6 +113,42 @@ class ClassPage extends StatelessWidget {
   }
 }
 
+class QRCodeScanner extends StatelessWidget {
+  final Function(String) onScan; // Callback to return the scanned barcode
+
+  QRCodeScanner({required this.onScan});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: ElevatedButton(
+        onPressed: () async {
+          await scan();
+        },
+        child: Text('START CAMERA SCAN'),
+      ),
+    );
+  }
+
+  Future<void> scan() async {
+    try {
+      String scannedBarcode = (await BarcodeScanner.scan()) as String;
+      onScan(scannedBarcode); // Call the callback with the scanned barcode
+    } on PlatformException catch (e) {
+      if (e.code == BarcodeScanner.cameraAccessDenied) {
+        onScan('The user did not grant the camera permission!');
+      } else {
+        onScan('Unknown error: $e');
+      }
+    } on FormatException {
+      onScan(
+          'null (User  returned using the "back"-button before scanning anything.)');
+    } catch (e) {
+      onScan('Unknown error: $e');
+    }
+  }
+}
+
 class JoinClass extends StatelessWidget {
   const JoinClass({super.key});
 
@@ -131,7 +169,14 @@ class JoinClass extends StatelessWidget {
 }
 
 // ignore: must_be_immutable
-class JoinClassDialog extends StatelessWidget {
+class JoinClassDialog extends StatefulWidget {
+  @override
+  State<JoinClassDialog> createState() => _JoinClassDialogState();
+}
+
+class _JoinClassDialogState extends State<JoinClassDialog> {
+  String barcode = "";
+
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -153,12 +198,40 @@ class JoinClassDialog extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
+            SizedBox(height: 20),
+            TextFormField(
+              decoration: const InputDecoration(
+                hintText: 'Class Code',
+                contentPadding: EdgeInsets.only(left: 10),
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                QRCodeScanner(
+                  onScan: (result) {
+                    setState(() {
+                      barcode =
+                          result; // Update the barcode with the scanned result
+                    });
+                  },
+                ),
+                SizedBox(height: 20),
+                Text(
+                  'Scanned Barcode: $barcode',
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
             SizedBox(height: 60),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
                 TextButton(
-                  child: Text('Create'),
+                  child: Text('Join'),
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
