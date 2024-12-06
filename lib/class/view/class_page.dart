@@ -163,7 +163,13 @@ class Widget1 extends StatelessWidget {
     return Container(
       width: double.infinity,
       padding: EdgeInsets.all(20),
-      color: Colors.red,
+      decoration: BoxDecoration(
+        color: Colors.red,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(40),
+          topRight: Radius.circular(40),
+        ),
+      ),
       child: Text(
         'This is Widget 1',
         style: TextStyle(color: Colors.white, fontSize: 24),
@@ -178,7 +184,13 @@ class Widget2 extends StatelessWidget {
     return Container(
       width: double.infinity,
       padding: EdgeInsets.all(20),
-      color: Colors.blue,
+      decoration: BoxDecoration(
+        color: Colors.blue,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(40),
+          topRight: Radius.circular(40),
+        ),
+      ),
       child: Text(
         'This is Widget 2',
         style: TextStyle(color: Colors.white, fontSize: 24),
