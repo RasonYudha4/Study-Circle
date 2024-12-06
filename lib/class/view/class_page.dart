@@ -96,62 +96,181 @@ class ClassPage extends StatelessWidget {
           )
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return Dialog(
-                  backgroundColor: Color(0xFF127369),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15), // Rounded corners
-                  ),
-                  child: Container(
-                    width: 200, // Set the width of the dialog
-                    height: 400, // Set the height of the dialog
-                    padding: EdgeInsets.all(20),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min, // Use minimum size
-                      children: <Widget>[
-                        Text(
-                          'Create a class',
-                          style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white),
-                        ),
-                        SizedBox(height: 40),
-                        TextFormField(
-                          decoration: const InputDecoration(
-                            hintText: 'Class Name',
-                          ),
-                        ),
-                        SizedBox(height: 20),
-                        TextFormField(
-                          decoration: const InputDecoration(
-                              hintText: 'Class Description'),
-                        ),
-                        SizedBox(height: 20),
-                        Text('This is a custom-sized alert dialog.'),
-                        SizedBox(height: 80),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: <Widget>[
-                            TextButton(
-                              child: Text('Create'),
-                              onPressed: () {
-                                Navigator.of(context).pop(); // Close the dialog
-                              },
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              });
+      floatingActionButton: BlocBuilder<SelectedBloc, SelectedState>(
+        builder: (context, state) {
+          if (state is Joined) {
+            return JoinClass();
+          } else if (state is Conducted) {
+            return CreateClass();
+          } else {
+            return Center(child: Text('Select a Widget'));
+          }
         },
-        shape: CircleBorder(),
+      ),
+    );
+  }
+}
+
+class JoinClass extends StatelessWidget {
+  const JoinClass({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return FloatingActionButton(
+      onPressed: () {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return JoinClassDialog();
+          },
+        );
+      },
+      shape: CircleBorder(),
+    );
+  }
+}
+
+// ignore: must_be_immutable
+class JoinClassDialog extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      backgroundColor: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: Container(
+        width: 400,
+        height: 450,
+        padding: EdgeInsets.all(20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Text(
+              'Join a class',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 60),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                TextButton(
+                  child: Text('Create'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class CreateClass extends StatelessWidget {
+  const CreateClass({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return FloatingActionButton(
+      onPressed: () {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return CreateClassDialog();
+          },
+        );
+      },
+      shape: CircleBorder(),
+    );
+  }
+}
+
+// ignore: must_be_immutable
+class CreateClassDialog extends StatelessWidget {
+  DateTime? selectedDate;
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      backgroundColor: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: Container(
+        width: 400,
+        height: 450,
+        padding: EdgeInsets.all(20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Text(
+              'Create a class',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 20),
+            TextFormField(
+              decoration: const InputDecoration(
+                hintText: 'Class Name',
+                contentPadding: EdgeInsets.only(left: 10),
+              ),
+            ),
+            SizedBox(height: 20),
+            TextFormField(
+              decoration: const InputDecoration(
+                hintText: 'Class Description',
+                contentPadding: EdgeInsets.only(left: 10),
+              ),
+            ),
+            SizedBox(height: 20),
+            GestureDetector(
+              onTap: () async {
+                DateTime? pickedDate = await showDatePicker(
+                  context: context,
+                  initialDate: selectedDate ?? DateTime.now(),
+                  firstDate: DateTime(2000),
+                  lastDate: DateTime(2101),
+                );
+                if (pickedDate != null && pickedDate != selectedDate) {
+                  selectedDate = pickedDate;
+                  (context as Element).markNeedsBuild(); // Force rebuild
+                }
+              },
+              child: AbsorbPointer(
+                child: TextFormField(
+                  decoration: InputDecoration(
+                    prefixIcon: Icon(Icons.calendar_month_outlined),
+                    hintText: selectedDate != null
+                        ? "${selectedDate!.toLocal()}".split(' ')[0]
+                        : 'Meet up date',
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: 60),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                TextButton(
+                  child: Text('Create'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
