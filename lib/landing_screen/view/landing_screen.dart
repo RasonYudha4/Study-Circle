@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:study_circle/class/bloc/selected_bloc.dart';
 import 'package:study_circle/class/class.dart';
 import 'package:study_circle/home/home.dart';
 import 'package:study_circle/landing_screen/bloc/landing_screen_bloc.dart';
@@ -20,11 +21,16 @@ List<BottomNavigationBarItem> bottomNavItems = const <BottomNavigationBarItem>[
   ),
 ];
 
-const List<Widget> bottomNavScreen = <Widget>[
-  HomePage(),
-  ClassPage(),
-  ProfilePage(),
-];
+List<Widget> bottomNavScreen(BuildContext context) {
+  return <Widget>[
+    HomePage(),
+    BlocProvider(
+      create: (context) => SelectedBloc(), // Provide SelectedBloc here
+      child: ClassPage(), // ClassPage now has access to SelectedBloc
+    ),
+    ProfilePage(),
+  ];
+}
 
 class LandingScreen extends StatelessWidget {
   const LandingScreen({super.key});
@@ -37,7 +43,8 @@ class LandingScreen extends StatelessWidget {
       listener: (context, state) {},
       builder: (context, state) {
         return Scaffold(
-          body: Center(child: bottomNavScreen.elementAt(state.tabIndex)),
+          body:
+              Center(child: bottomNavScreen(context).elementAt(state.tabIndex)),
           bottomNavigationBar: BottomNavigationBar(
             items: bottomNavItems,
             currentIndex: state.tabIndex,

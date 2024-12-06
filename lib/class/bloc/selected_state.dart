@@ -1,11 +1,7 @@
 part of 'selected_bloc.dart';
 
-sealed class SelectedState {
-  final int tabIndex;
+sealed class SelectedState {}
 
-  const SelectedState({required this.tabIndex});
-}
+class Joined extends SelectedState {}
 
-class SelectedInitial extends SelectedState {
-  const SelectedInitial({required super.tabIndex});
-}
+class Conducted extends SelectedState {}

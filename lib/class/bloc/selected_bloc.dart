@@ -5,16 +5,16 @@ part 'selected_event.dart';
 part 'selected_state.dart';
 
 class SelectedBloc extends Bloc<SelectedEvent, SelectedState> {
-  SelectedBloc() : super(SelectedInitial(tabIndex: 0)) {
+  SelectedBloc() : super(Joined()) {
     on<SelectJoined>(_onJoinedPressed);
     on<SelectConducted>(_onConductedPressed);
   }
 
   void _onJoinedPressed(SelectJoined event, Emitter<SelectedState> emit) {
-    emit(SelectedInitial(tabIndex: 0));
+    emit(Joined());
   }
 
   void _onConductedPressed(SelectConducted event, Emitter<SelectedState> emit) {
-    emit(SelectedInitial(tabIndex: 1));
+    emit(Conducted());
   }
 }
