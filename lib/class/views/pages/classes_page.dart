@@ -23,10 +23,13 @@ class ClassesPage extends StatelessWidget {
           AppBar(
             title: Text(
               'Classes',
-              style: TextStyle(fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white),
             ),
             centerTitle: true,
-            backgroundColor: Color(0xFF8AA6A3),
+            backgroundColor: Color(0xFF127369),
           ),
           SizedBox(
             height: 20,
