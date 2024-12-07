@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:study_circle/class/bloc/selected_bloc.dart';
+import 'package:study_circle/class/blocs/scan/scan_bloc.dart';
+import 'package:study_circle/class/blocs/selected/selected_bloc.dart';
 import 'package:study_circle/class/class.dart';
 import 'package:study_circle/home/home.dart';
 import 'package:study_circle/landing_screen/bloc/landing_screen_bloc.dart';
@@ -24,9 +25,16 @@ List<BottomNavigationBarItem> bottomNavItems = const <BottomNavigationBarItem>[
 List<Widget> bottomNavScreen(BuildContext context) {
   return <Widget>[
     HomePage(),
-    BlocProvider(
-      create: (context) => SelectedBloc(), // Provide SelectedBloc here
-      child: ClassPage(), // ClassPage now has access to SelectedBloc
+    MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => SelectedBloc(),
+        ),
+        BlocProvider(
+          create: (context) => ScanBloc(),
+        ),
+      ],
+      child: ClassesPage(),
     ),
     ProfilePage(),
   ];

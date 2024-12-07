@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:study_circle/app/app.dart';
-import 'package:study_circle/class/bloc/selected_bloc.dart';
+import 'package:study_circle/class/blocs/scan/scan_bloc.dart';
+import 'package:study_circle/class/blocs/selected/selected_bloc.dart';
 
-class ClassPage extends StatelessWidget {
-  const ClassPage({super.key});
+class ClassesPage extends StatelessWidget {
+  const ClassesPage({super.key});
 
-  static Page<void> page() => const MaterialPage<void>(child: ClassPage());
+  static Page<void> page() => const MaterialPage<void>(child: ClassesPage());
 
   @override
   Widget build(BuildContext context) {
@@ -86,12 +87,10 @@ class ClassPage extends StatelessWidget {
           Expanded(
             child: BlocBuilder<SelectedBloc, SelectedState>(
               builder: (context, state) {
-                if (state is Joined) {
-                  return Widget1(); // Replace with your actual widget for "Joined"
-                } else if (state is Conducted) {
-                  return Widget2(); // Replace with your actual widget for "Conducted"
+                if (state is Conducted) {
+                  return ConductedScreen();
                 } else {
-                  return Center(child: Text('Select a Widget'));
+                  return JoinedScreen();
                 }
               },
             ),
@@ -114,38 +113,22 @@ class ClassPage extends StatelessWidget {
 }
 
 class QRCodeScanner extends StatelessWidget {
-  final Function(String) onScan; // Callback to return the scanned barcode
-
-  QRCodeScanner({required this.onScan});
+  QRCodeScanner();
 
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: ElevatedButton(
-        onPressed: () async {
-          await scan();
+      child: BlocBuilder<ScanBloc, ScanState>(
+        builder: (context, state) {
+          return ElevatedButton(
+            onPressed: () {
+              BlocProvider.of<ScanBloc>(context).add(StartScanEvent());
+            },
+            child: Text('START CAMERA SCAN'),
+          );
         },
-        child: Text('START CAMERA SCAN'),
       ),
     );
-  }
-
-  Future<void> scan() async {
-    try {
-      String scannedBarcode = (await BarcodeScanner.scan()) as String;
-      onScan(scannedBarcode); // Call the callback with the scanned barcode
-    } on PlatformException catch (e) {
-      if (e.code == BarcodeScanner.cameraAccessDenied) {
-        onScan('The user did not grant the camera permission!');
-      } else {
-        onScan('Unknown error: $e');
-      }
-    } on FormatException {
-      onScan(
-          'null (User  returned using the "back"-button before scanning anything.)');
-    } catch (e) {
-      onScan('Unknown error: $e');
-    }
   }
 }
 
@@ -159,7 +142,10 @@ class JoinClass extends StatelessWidget {
         showDialog(
           context: context,
           builder: (BuildContext context) {
-            return JoinClassDialog();
+            return BlocProvider(
+              create: (context) => ScanBloc(),
+              child: JoinClassDialog(),
+            );
           },
         );
       },
@@ -169,14 +155,7 @@ class JoinClass extends StatelessWidget {
 }
 
 // ignore: must_be_immutable
-class JoinClassDialog extends StatefulWidget {
-  @override
-  State<JoinClassDialog> createState() => _JoinClassDialogState();
-}
-
-class _JoinClassDialogState extends State<JoinClassDialog> {
-  String barcode = "";
-
+class JoinClassDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -211,17 +190,17 @@ class _JoinClassDialogState extends State<JoinClassDialog> {
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                QRCodeScanner(
-                  onScan: (result) {
-                    setState(() {
-                      barcode =
-                          result; // Update the barcode with the scanned result
-                    });
-                  },
+                Center(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      BlocProvider.of<ScanBloc>(context).add(StartScanEvent());
+                    },
+                    child: Text('START CAMERA SCAN'),
+                  ),
                 ),
                 SizedBox(height: 20),
                 Text(
-                  'Scanned Barcode: $barcode',
+                  'Scanned Barcode: ',
                   textAlign: TextAlign.center,
                 ),
               ],
@@ -349,7 +328,7 @@ class CreateClassDialog extends StatelessWidget {
   }
 }
 
-class Widget1 extends StatelessWidget {
+class JoinedScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -370,7 +349,7 @@ class Widget1 extends StatelessWidget {
   }
 }
 
-class Widget2 extends StatelessWidget {
+class ConductedScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
