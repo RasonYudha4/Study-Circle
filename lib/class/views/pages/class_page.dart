@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:study_circle/class/views/pages/quiz_page.dart';
 
 class ClassPage extends StatelessWidget {
   const ClassPage({super.key});
@@ -322,7 +323,14 @@ class AvailableQuiz extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        print("Clicked");
+        Navigator.push(
+          context,
+          MaterialPageRoute<void>(
+            builder: (BuildContext context) {
+              return const QuizPage();
+            },
+          ),
+        );
       },
       child: Padding(
         padding: const EdgeInsets.only(
