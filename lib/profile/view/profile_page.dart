@@ -14,7 +14,7 @@ class ProfilePage extends StatelessWidget {
     final user = context.select((AppBloc bloc) => bloc.state.user);
 
     return Scaffold(
-      backgroundColor: Color(0xFF8AA6A3),
+      backgroundColor: Color(0xFFBFBFBF),
       body: Column(
         children: [
           Container(

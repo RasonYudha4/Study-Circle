@@ -1,21 +1,32 @@
 import 'package:flutter/material.dart';
 
+import '../widgets/widgets.dart';
+
 class JoinedScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.all(20),
+      padding: EdgeInsets.all(25),
       decoration: BoxDecoration(
-        color: Colors.red,
+        color: Color(0xFFBFBFBF),
         borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(40),
-          topRight: Radius.circular(40),
+          topLeft: Radius.circular(30),
+          topRight: Radius.circular(30),
         ),
       ),
-      child: Text(
-        'This is Widget 1',
-        style: TextStyle(color: Colors.white, fontSize: 24),
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            SizedBox(
+              height: 16,
+            ),
+            // Place to store cards
+            SizedBox(
+              height: 20,
+            ),
+          ],
+        ),
       ),
     );
   }

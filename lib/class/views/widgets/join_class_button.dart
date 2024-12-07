@@ -10,6 +10,7 @@ class JoinClass extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
+      backgroundColor: Color(0xFF10403B),
       onPressed: () {
         showDialog(
           context: context,
@@ -22,6 +23,11 @@ class JoinClass extends StatelessWidget {
         );
       },
       shape: CircleBorder(),
+      child: Icon(
+        Icons.add,
+        size: 36,
+        color: Colors.white,
+      ),
     );
   }
 }

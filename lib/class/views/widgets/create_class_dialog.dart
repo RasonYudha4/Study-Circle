@@ -13,7 +13,7 @@ class CreateClassDialog extends StatelessWidget {
       ),
       child: Container(
         width: 400,
-        height: 450,
+        height: 400,
         padding: EdgeInsets.all(20),
         child: Column(
           mainAxisSize: MainAxisSize.min,
