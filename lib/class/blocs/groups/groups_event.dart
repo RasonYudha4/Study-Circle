@@ -6,3 +6,23 @@ sealed class GroupsEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
+
+class LoadGroups extends GroupsEvent {}
+
+class AddGroups extends GroupsEvent {
+  final Group group;
+
+  AddGroups(this.group);
+}
+
+class UpdateGroup extends GroupsEvent {
+  final Group group;
+
+  UpdateGroup(this.group);
+}
+
+class DeleteGroup extends GroupsEvent {
+  final String todoId;
+
+  DeleteGroup(this.todoId);
+}

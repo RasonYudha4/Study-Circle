@@ -14,7 +14,7 @@ class Group {
       required this.description});
 
   Group copyWith({
-    String? uid,
+    String? id,
     String? name,
     String? date,
     String? description,
@@ -22,7 +22,7 @@ class Group {
     List<Quiz>? quizzes,
   }) {
     return Group(
-        id: uid ?? this.id,
+        id: id ?? this.id,
         name: name ?? this.name,
         date: date ?? this.date,
         description: description ?? this.description);
