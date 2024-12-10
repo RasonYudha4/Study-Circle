@@ -7,7 +7,7 @@ sealed class GroupsState extends Equatable {
   List<Object> get props => [];
 }
 
-final class GroupsInitial extends GroupsState {}
+class GroupsInitial extends GroupsState {}
 
 class GroupsLoading extends GroupsState {}
 

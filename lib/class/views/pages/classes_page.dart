@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:study_circle/app/app.dart';
+import 'package:study_circle/class/blocs/groups/groups_bloc.dart';
 import 'package:study_circle/class/blocs/selected/selected_bloc.dart';
 
 import '../widgets/widgets.dart';
@@ -15,7 +16,7 @@ class ClassesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final user = context.select((AppBloc bloc) => bloc.state.user);
-
+    final GroupsBloc _groupBloc = BlocProvider.of<GroupsBloc>(context);
     return Scaffold(
       backgroundColor: Color(0xFF8AA6A3),
       body: Column(
@@ -42,7 +43,11 @@ class ClassesPage extends StatelessWidget {
             child: BlocBuilder<SelectedBloc, SelectedState>(
               builder: (context, state) {
                 if (state is Conducted) {
-                  return ConductedScreen();
+                  return BlocBuilder<GroupsBloc, GroupsState>(
+                    builder: (context, state) {
+                      return ConductedScreen();
+                    },
+                  );
                 } else {
                   return JoinedScreen();
                 }

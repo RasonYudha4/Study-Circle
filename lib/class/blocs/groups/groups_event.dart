@@ -22,7 +22,7 @@ class UpdateGroup extends GroupsEvent {
 }
 
 class DeleteGroup extends GroupsEvent {
-  final String todoId;
+  final String groupId;
 
-  DeleteGroup(this.todoId);
+  DeleteGroup(this.groupId);
 }
