@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:study_circle/app/app.dart';
 import 'package:study_circle/class/blocs/groups/groups_bloc.dart';
 import 'package:study_circle/class/blocs/selected/selected_bloc.dart';
+import 'package:study_circle/class/services/firestore_service.dart';
 
 import '../widgets/widgets.dart';
 import 'pages.dart';
@@ -16,7 +17,6 @@ class ClassesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final user = context.select((AppBloc bloc) => bloc.state.user);
-    final GroupsBloc _groupBloc = BlocProvider.of<GroupsBloc>(context);
     return Scaffold(
       backgroundColor: Color(0xFF8AA6A3),
       body: BlocBuilder<GroupsBloc, GroupsState>(

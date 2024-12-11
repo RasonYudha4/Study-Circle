@@ -52,6 +52,7 @@ class _ConductedScreenState extends State<ConductedScreen> {
                       return Column(
                         children: [
                           ConductedClassCard(
+                              id: group.id,
                               classDescription: group.description,
                               classTitle: group.name,
                               code: group.invCode.toString()),

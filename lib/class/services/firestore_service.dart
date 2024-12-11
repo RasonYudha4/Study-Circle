@@ -13,7 +13,7 @@ class FirestoreService {
           id: doc.id,
           invCode: data['invCode'],
           name: data['name'],
-          date: data['date'],
+          date: List<String>.from(data['date'] ?? []),
           description: data['description'],
         );
       }).toList();
@@ -35,6 +35,8 @@ class FirestoreService {
       'invCode': group.invCode,
       'date': group.date,
       'description': group.description,
+      'members': group.members,
+      'quizzes': group.quizzes
     });
   }
 

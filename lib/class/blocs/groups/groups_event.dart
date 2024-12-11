@@ -27,4 +27,7 @@ class DeleteGroup extends GroupsEvent {
   final String groupId;
 
   DeleteGroup(this.groupId);
+
+  @override
+  List<Object> get props => [groupId];
 }
