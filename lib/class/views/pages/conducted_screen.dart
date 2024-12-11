@@ -54,7 +54,7 @@ class _ConductedScreenState extends State<ConductedScreen> {
                           ConductedClassCard(
                               classDescription: group.description,
                               classTitle: group.name,
-                              code: group.id),
+                              code: group.invCode.toString()),
                           SizedBox(
                             height: 16,
                           )

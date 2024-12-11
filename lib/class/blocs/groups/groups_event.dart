@@ -7,6 +7,8 @@ sealed class GroupsEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class DeleteAllGroups extends GroupsEvent {}
+
 class LoadGroups extends GroupsEvent {}
 
 class AddGroups extends GroupsEvent {

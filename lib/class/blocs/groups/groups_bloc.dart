@@ -55,5 +55,17 @@ class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
         }
       },
     );
+
+    on<DeleteAllGroups>(
+      (event, emit) async {
+        try {
+          emit(GroupsLoading());
+          await _firestoreService.deleteAllGroups();
+          emit(GroupsOperationSuccess('All classes deleted successfully'));
+        } catch (e) {
+          emit(GroupsError('Failed to delete all classes'));
+        }
+      },
+    );
   }
 }

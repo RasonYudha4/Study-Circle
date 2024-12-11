@@ -46,7 +46,7 @@ class ConductedClassCard extends StatelessWidget {
                       fontSize: 20),
                 ),
                 Text(
-                  '${code}',
+                  '#${code}',
                   style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,

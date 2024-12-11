@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:study_circle/class/blocs/groups/groups_bloc.dart';
+import 'package:study_circle/class/services/firestore_service.dart';
 
 import 'widgets.dart';
 
@@ -10,10 +13,15 @@ class CreateClass extends StatelessWidget {
     return FloatingActionButton(
       backgroundColor: Color(0xFF10403B),
       onPressed: () {
+        // Warning : Only use this line if you want to delete all the groups since there's a bug somewhere
+        // BlocProvider.of<GroupsBloc>(context).add(DeleteAllGroups());
         showDialog(
           context: context,
           builder: (BuildContext context) {
-            return CreateClassDialog();
+            return BlocProvider(
+              create: (context) => GroupsBloc(FirestoreService()),
+              child: CreateClassDialog(),
+            );
           },
         );
       },

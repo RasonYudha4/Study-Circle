@@ -19,42 +19,42 @@ class ClassesPage extends StatelessWidget {
     final GroupsBloc _groupBloc = BlocProvider.of<GroupsBloc>(context);
     return Scaffold(
       backgroundColor: Color(0xFF8AA6A3),
-      body: Column(
-        children: [
-          AppBar(
-            title: Text(
-              'Classes',
-              style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white),
-            ),
-            centerTitle: true,
-            backgroundColor: Color(0xFF127369),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          SelectBar(),
-          SizedBox(
-            height: 20,
-          ),
-          Expanded(
-            child: BlocBuilder<SelectedBloc, SelectedState>(
-              builder: (context, state) {
-                if (state is Conducted) {
-                  return BlocBuilder<GroupsBloc, GroupsState>(
-                    builder: (context, state) {
+      body: BlocBuilder<GroupsBloc, GroupsState>(
+        builder: (context, state) {
+          return Column(
+            children: [
+              AppBar(
+                title: Text(
+                  'Classes',
+                  style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+                centerTitle: true,
+                backgroundColor: Color(0xFF127369),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              SelectBar(),
+              SizedBox(
+                height: 20,
+              ),
+              Expanded(
+                child: BlocBuilder<SelectedBloc, SelectedState>(
+                  builder: (context, state) {
+                    if (state is Conducted) {
                       return ConductedScreen();
-                    },
-                  );
-                } else {
-                  return JoinedScreen();
-                }
-              },
-            ),
-          )
-        ],
+                    } else {
+                      return JoinedScreen();
+                    }
+                  },
+                ),
+              )
+            ],
+          );
+        },
       ),
       floatingActionButton: BlocBuilder<SelectedBloc, SelectedState>(
         builder: (context, state) {

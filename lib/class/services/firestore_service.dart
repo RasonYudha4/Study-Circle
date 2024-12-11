@@ -11,6 +11,7 @@ class FirestoreService {
         Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
         return Group(
           id: doc.id,
+          invCode: data['invCode'],
           name: data['name'],
           date: data['date'],
           description: data['description'],
@@ -22,6 +23,7 @@ class FirestoreService {
   Future<void> addGroup(Group group) {
     return _groupsCollection.add({
       'name': group.name,
+      'invCode': group.invCode,
       'date': group.date,
       'description': group.description,
     });
@@ -30,6 +32,7 @@ class FirestoreService {
   Future<void> updateGroup(Group group) {
     return _groupsCollection.doc(group.id).update({
       'name': group.name,
+      'invCode': group.invCode,
       'date': group.date,
       'description': group.description,
     });
@@ -37,5 +40,15 @@ class FirestoreService {
 
   Future<void> deleteGroup(String groupId) {
     return _groupsCollection.doc(groupId).delete();
+  }
+
+  Future<void> deleteAllGroups() async {
+    QuerySnapshot snapshot = await _groupsCollection.get();
+    WriteBatch batch = FirebaseFirestore.instance.batch();
+
+    for (QueryDocumentSnapshot doc in snapshot.docs) {
+      batch.delete(doc.reference);
+    }
+    await batch.commit();
   }
 }
