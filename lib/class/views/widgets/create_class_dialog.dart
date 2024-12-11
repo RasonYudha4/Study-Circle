@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:study_circle/app/bloc/app_bloc.dart';
 import 'package:study_circle/class/blocs/groups/groups_bloc.dart';
 import 'package:study_circle/class/models/group.dart';
 import 'package:study_circle/class/views/widgets/widgets.dart';
@@ -29,6 +30,7 @@ class _CreateClassDialogState extends State<CreateClassDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final user = context.select((AppBloc bloc) => bloc.state.user);
     final TextEditingController _classNameController = TextEditingController();
     final TextEditingController _classDescriptionController =
         TextEditingController();
@@ -81,6 +83,7 @@ class _CreateClassDialogState extends State<CreateClassDialog> {
             final group = Group(
                 name: _classNameController.text,
                 invCode: randomCode.toString(),
+                creator: user.id,
                 description: _classDescriptionController.text,
                 date: [_selectedDateController.text]);
             BlocProvider.of<GroupsBloc>(context).add(AddGroups(group));

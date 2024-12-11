@@ -10,12 +10,13 @@ class FirestoreService {
       return snapshot.docs.map((doc) {
         Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
         return Group(
-          id: doc.id,
-          invCode: data['invCode'],
-          name: data['name'],
-          date: List<String>.from(data['date'] ?? []),
-          description: data['description'],
-        );
+            id: doc.id,
+            invCode: data['invCode'],
+            name: data['name'],
+            creator: data['creator'],
+            date: List<String>.from(data['date'] ?? []),
+            description: data['description'],
+            members: data['members']);
       }).toList();
     });
   }
@@ -23,9 +24,11 @@ class FirestoreService {
   Future<void> addGroup(Group group) {
     return _groupsCollection.add({
       'name': group.name,
+      'creator': group.creator,
       'invCode': group.invCode,
       'date': group.date,
       'description': group.description,
+      'members': group.members,
     });
   }
 
