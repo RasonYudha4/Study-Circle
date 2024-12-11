@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class JoinedClassCard extends StatelessWidget {
   const JoinedClassCard({
     super.key,
+    this.id,
     required this.classDescription,
     required this.classTitle,
     required this.code,
@@ -12,6 +13,7 @@ class JoinedClassCard extends StatelessWidget {
   final String classTitle;
   final String code;
   final String creator;
+  final String? id;
 
   @override
   Widget build(BuildContext context) {

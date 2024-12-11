@@ -77,9 +77,6 @@ class _CreateClassDialogState extends State<CreateClassDialog> {
         ElevatedButton(
           child: const Text('Add'),
           onPressed: () {
-            print("Class Name: ${_classNameController.text}");
-            print("Class Desc: ${_classDescriptionController.text}");
-            print("Meet Up Date: ${_selectedDateController.text}");
             final group = Group(
                 name: _classNameController.text,
                 invCode: randomCode.toString(),
