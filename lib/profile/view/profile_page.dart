@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:study_circle/app/app.dart';
 import 'package:study_circle/home/home.dart';
+import 'package:study_circle/profile/view/profile_details.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -14,7 +15,7 @@ class ProfilePage extends StatelessWidget {
     final user = context.select((AppBloc bloc) => bloc.state.user);
 
     return Scaffold(
-      backgroundColor: Color(0xFFBFBFBF),
+      backgroundColor: Color(0xFF127369),
       body: Column(
         children: [
           Container(
@@ -23,17 +24,66 @@ class ProfilePage extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 Avatar(photo: user.photo),
-                const SizedBox(height: 4),
-                Text(user.email ?? '', style: textTheme.titleLarge),
-                const SizedBox(height: 4),
-                Text(user.name ?? '', style: textTheme.headlineSmall),
+                const SizedBox(height: 8),
+                Text(
+                  user.email ?? '',
+                  style: textTheme.titleLarge?.copyWith(color: Colors.white),
+                ),
+                const SizedBox(height: 8),
+                Text(user.name ?? '',
+                    style:
+                        textTheme.headlineSmall?.copyWith(color: Colors.white)),
               ],
             ),
           ),
           SizedBox(
             height: 40,
           ),
-          LogoutButton()
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute<void>(
+                  builder: (BuildContext context) {
+                    return const ProfileDetails();
+                  },
+                ),
+              );
+            },
+            child: Container(
+              height: 80,
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              decoration: BoxDecoration(
+                  border: Border(
+                      bottom: BorderSide(color: Colors.white, width: 0.5))),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.library_books,
+                        color: Colors.white,
+                      ),
+                      const SizedBox(
+                        width: 20,
+                      ),
+                      const Text(
+                        "Fill Details",
+                        style: TextStyle(fontSize: 18, color: Colors.white),
+                      )
+                    ],
+                  ),
+                  Icon(
+                    Icons.chevron_right_outlined,
+                    color: Colors.white,
+                    size: 30,
+                  )
+                ],
+              ),
+            ),
+          ),
+          LogoutButton(),
         ],
       ),
     );
@@ -56,7 +106,7 @@ class LogoutButton extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 20),
         decoration: BoxDecoration(
             border:
-                Border(bottom: BorderSide(color: Colors.black, width: 0.5))),
+                Border(bottom: BorderSide(color: Colors.white, width: 0.5))),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -64,20 +114,20 @@ class LogoutButton extends StatelessWidget {
               children: [
                 Icon(
                   Icons.logout_outlined,
-                  color: Color(0xFF10403B),
+                  color: Colors.white,
                 ),
                 const SizedBox(
                   width: 20,
                 ),
                 const Text(
                   "Log Out",
-                  style: TextStyle(fontSize: 18),
+                  style: TextStyle(fontSize: 18, color: Colors.white),
                 )
               ],
             ),
             Icon(
               Icons.chevron_right_outlined,
-              color: Color(0xFF10403B),
+              color: Colors.white,
               size: 30,
             )
           ],

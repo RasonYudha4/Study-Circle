@@ -25,7 +25,9 @@ dependencies:
     path: packages/form_inputs
   formz: ^0.7.0
   google_fonts: ^6.2.1
+  image_picker: ^1.1.2
   meta: ^1.15.0
+  sqflite: ^2.4.1
 
 dev_dependencies:
   bloc_test: ^9.0.0
