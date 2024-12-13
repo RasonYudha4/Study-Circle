@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:study_circle/app/bloc/app_bloc.dart';
 import 'package:study_circle/home/widgets/avatar.dart';
+import 'package:study_circle/profile/bloc/image_picker/image_picker_bloc.dart';
 
 class ProfileDetails extends StatelessWidget {
   const ProfileDetails({super.key});
@@ -83,8 +85,19 @@ class ProfileDetails extends StatelessWidget {
                             bottom: 0,
                             right: 0,
                             child: GestureDetector(
-                              onTap: () {
-                                print("Photo clicked");
+                              onTap: () async {
+                                final image = await ImagePicker()
+                                    .pickImage(source: ImageSource.camera);
+                                if (image != null) {
+                                  final userId = user.id;
+                                  final imageBytes = await image.readAsBytes();
+                                  BlocProvider.of<ImagePickerBloc>(context).add(
+                                    InsertImagePickerEvent(
+                                      image: imageBytes,
+                                      userId: userId,
+                                    ),
+                                  );
+                                }
                               },
                               child: Container(
                                 height: 38,
@@ -119,7 +132,32 @@ class ProfileDetails extends StatelessWidget {
                     ),
                   ),
                 ],
-              ))
+              )),
+          Positioned(
+            top: 300,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            child: TextFormField(
+              decoration: InputDecoration(
+                hintText: user.name == '' ? 'user name' : user.name,
+                contentPadding: EdgeInsets.only(left: 10),
+              ),
+            ),
+          ),
+          Positioned(
+            top: 800,
+            left: 0,
+            right: 0,
+            bottom: 50,
+            child: ElevatedButton(
+              child: const Text('Update data'),
+              onPressed: () {
+                // BlocProvider.of<GroupsBloc>(context).add(AddGroups(group));
+                Navigator.pop(context);
+              },
+            ),
+          ),
         ],
       ),
     );

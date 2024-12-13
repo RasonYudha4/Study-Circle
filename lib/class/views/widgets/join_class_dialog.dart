@@ -2,7 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:study_circle/class/blocs/scan/scan_bloc.dart';
 
-class JoinClassDialog extends StatelessWidget {
+class JoinClassDialog extends StatefulWidget {
+  @override
+  State<JoinClassDialog> createState() => _JoinClassDialogState();
+}
+
+class _JoinClassDialogState extends State<JoinClassDialog> {
+  final _classCodeController = TextEditingController();
+  @override
+  void dispose() {
+    _classCodeController.dispose(); // Dispose of the controller
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -26,6 +38,7 @@ class JoinClassDialog extends StatelessWidget {
             ),
             SizedBox(height: 20),
             TextFormField(
+              controller: _classCodeController,
               decoration: const InputDecoration(
                 hintText: 'Class Code',
                 contentPadding: EdgeInsets.only(left: 10),
@@ -46,9 +59,24 @@ class JoinClassDialog extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 20),
-                Text(
-                  'Scanned Barcode: ',
-                  textAlign: TextAlign.center,
+                BlocBuilder<ScanBloc, ScanState>(
+                  builder: (context, state) {
+                    if (state is ScanSuccess) {
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        _classCodeController.text = state.barcode;
+                      });
+                    } else if (state is ScanError) {
+                      return Text(
+                        'Error: ${state.message}', // Display error message
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.red),
+                      );
+                    }
+                    return Text(
+                      'Scanned Barcode: ', // Default text
+                      textAlign: TextAlign.center,
+                    );
+                  },
                 ),
               ],
             ),

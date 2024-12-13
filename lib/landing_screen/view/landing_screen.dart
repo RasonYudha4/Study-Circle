@@ -7,7 +7,9 @@ import 'package:study_circle/class/class.dart';
 import 'package:study_circle/class/services/firestore_service.dart';
 import 'package:study_circle/home/home.dart';
 import 'package:study_circle/landing_screen/bloc/landing_screen_bloc.dart';
+import 'package:study_circle/profile/bloc/image_picker/image_picker_bloc.dart';
 import 'package:study_circle/profile/profile.dart';
+import 'package:study_circle/profile/repository/image_repository.dart';
 
 List<BottomNavigationBarItem> bottomNavItems = const <BottomNavigationBarItem>[
   BottomNavigationBarItem(
@@ -41,7 +43,14 @@ List<Widget> bottomNavScreen(BuildContext context) {
       ],
       child: ClassesPage(),
     ),
-    ProfilePage(),
+    MultiBlocProvider(
+      providers: [
+        BlocProvider(
+            create: (context) =>
+                ImagePickerBloc(databaseHelper: ImageRepository()))
+      ],
+      child: ProfilePage(),
+    ),
   ];
 }
 

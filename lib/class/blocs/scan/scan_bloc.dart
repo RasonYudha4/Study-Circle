@@ -15,8 +15,9 @@ class ScanBloc extends Bloc<ScanEvent, ScanState> {
     emit(ScanLoading());
 
     try {
-      String scannedBarcode = (await BarcodeScanner.scan()) as String;
-      emit(ScanSuccess(scannedBarcode));
+      ScanResult scannedBarcode = await BarcodeScanner.scan();
+      print('Scanned URL: ${scannedBarcode.rawContent}');
+      emit(ScanSuccess(scannedBarcode.rawContent));
     } on PlatformException catch (e) {
       if (e.code == BarcodeScanner.cameraAccessDenied) {
         emit(ScanError('The user did not grant the camera permission!'));
