@@ -1,19 +1,19 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:study_circle/class/models/group.dart';
-import 'package:study_circle/class/services/firestore_service.dart';
+import 'package:study_circle/class/services/group_service.dart';
 
 part 'groups_event.dart';
 part 'groups_state.dart';
 
 class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
-  final FirestoreService _firestoreService;
+  final GroupService _GroupService;
 
-  GroupsBloc(this._firestoreService) : super(GroupsInitial()) {
+  GroupsBloc(this._GroupService) : super(GroupsInitial()) {
     on<LoadGroups>((event, emit) async {
       try {
         emit(GroupsLoading());
-        final groups = await _firestoreService.getGroups().first;
+        final groups = await _GroupService.getGroups().first;
         emit(GroupsLoaded(groups));
       } catch (e) {
         emit(GroupsError('Failed to load classes'));
@@ -24,7 +24,7 @@ class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
       (event, emit) async {
         try {
           emit(GroupsLoading());
-          await _firestoreService.addGroup(event.group);
+          await _GroupService.addGroup(event.group);
           emit(GroupsOperationSuccess('Class created successfully'));
         } catch (e) {
           emit(GroupsError('Failed to create class'));
@@ -36,7 +36,7 @@ class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
       (event, emit) async {
         try {
           emit(GroupsLoading());
-          await _firestoreService.updateGroup(event.group);
+          await _GroupService.updateGroup(event.group);
           emit(GroupsOperationSuccess('Class updated successfully'));
         } catch (e) {
           emit(GroupsError('Failed to update class'));
@@ -48,7 +48,7 @@ class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
       (event, emit) async {
         try {
           emit(GroupsLoading());
-          await _firestoreService.deleteGroup(event.groupId);
+          await _GroupService.deleteGroup(event.groupId);
           emit(GroupsOperationSuccess('Class deleted successfully'));
         } catch (e) {
           emit(GroupsError('Failed to delete class'));
@@ -60,7 +60,7 @@ class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
       (event, emit) async {
         try {
           emit(GroupsLoading());
-          await _firestoreService.deleteAllGroups();
+          await _GroupService.deleteAllGroups();
           emit(GroupsOperationSuccess('All classes deleted successfully'));
         } catch (e) {
           emit(GroupsError('Failed to delete all classes'));

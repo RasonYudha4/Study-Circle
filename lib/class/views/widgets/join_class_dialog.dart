@@ -72,10 +72,7 @@ class _JoinClassDialogState extends State<JoinClassDialog> {
                         style: TextStyle(color: Colors.red),
                       );
                     }
-                    return Text(
-                      'Scanned Barcode: ', // Default text
-                      textAlign: TextAlign.center,
-                    );
+                    return SizedBox();
                   },
                 ),
               ],

@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:study_circle/app/app.dart';
 import 'package:study_circle/class/blocs/groups/groups_bloc.dart';
 import 'package:study_circle/class/blocs/selected/selected_bloc.dart';
-import 'package:study_circle/class/services/firestore_service.dart';
+import 'package:study_circle/class/services/group_service.dart';
 
 import '../widgets/widgets.dart';
 import 'pages.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:study_circle/class/blocs/groups/groups_bloc.dart';
-import 'package:study_circle/class/services/firestore_service.dart';
+import 'package:study_circle/class/services/group_service.dart';
 
 import 'widgets.dart';
 
@@ -19,7 +19,7 @@ class CreateClass extends StatelessWidget {
           context: context,
           builder: (BuildContext context) {
             return BlocProvider(
-              create: (context) => GroupsBloc(FirestoreService()),
+              create: (context) => GroupsBloc(GroupService()),
               child: CreateClassDialog(),
             );
           },
