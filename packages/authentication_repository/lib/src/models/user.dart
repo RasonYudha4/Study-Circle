@@ -14,6 +14,23 @@ class User extends Equatable {
     this.photo,
   });
 
+  User copyWith({String? id, String? email, String? name, String? photo}) {
+    return User(
+        id: id ?? this.id,
+        email: email ?? this.email,
+        name: name ?? this.name,
+        photo: photo ?? this.photo);
+  }
+
+  factory User.fromJson(Map<String, dynamic> json) {
+    return User(
+      id: json['id'] as String,
+      email: json['email'] as String?,
+      name: json['name'] as String?,
+      photo: json['photo'] as String?,
+    );
+  }
+
   /// The current user's email address.
   final String? email;
 

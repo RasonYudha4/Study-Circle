@@ -3,7 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:study_circle/app/app.dart';
 import 'package:study_circle/home/home.dart';
 import 'package:study_circle/profile/bloc/image_picker/image_picker_bloc.dart';
-import 'package:study_circle/profile/repository/image_repository.dart';
+import 'package:study_circle/profile/bloc/update_user/update_user_bloc.dart';
+import 'package:study_circle/profile/services/image_service.dart';
+import 'package:study_circle/profile/services/user_service.dart';
 import 'package:study_circle/profile/view/profile_details.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -51,9 +53,13 @@ class ProfilePage extends StatelessWidget {
                     MaterialPageRoute<void>(
                       builder: (BuildContext context) {
                         return BlocProvider(
-                          create: (context) => ImagePickerBloc(
-                              databaseHelper: ImageRepository()),
-                          child: const ProfileDetails(),
+                          create: (context) =>
+                              ImagePickerBloc(databaseHelper: ImageService()),
+                          child: BlocProvider(
+                            create: (context) =>
+                                UpdateUserBloc(userService: UserService()),
+                            child: const ProfileDetails(),
+                          ),
                         );
                       },
                     ),

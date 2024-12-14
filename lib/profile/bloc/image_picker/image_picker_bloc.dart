@@ -2,14 +2,14 @@ import 'dart:typed_data';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:study_circle/profile/repository/image_repository.dart';
+import 'package:study_circle/profile/services/image_service.dart';
 
 part 'image_picker_event.dart';
 part 'image_picker_state.dart';
 
 class ImagePickerBloc extends Bloc<ImagePickerEvent, ImagePickerState> {
-  final ImageRepository _databaseHelper;
-  ImagePickerBloc({required ImageRepository databaseHelper})
+  final ImageService _databaseHelper;
+  ImagePickerBloc({required ImageService databaseHelper})
       : _databaseHelper = databaseHelper,
         super(ImageInitialState()) {
     on<InsertImagePickerEvent>(_insertImage);

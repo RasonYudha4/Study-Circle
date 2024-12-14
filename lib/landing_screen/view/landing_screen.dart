@@ -8,8 +8,10 @@ import 'package:study_circle/class/services/group_service.dart';
 import 'package:study_circle/home/home.dart';
 import 'package:study_circle/landing_screen/bloc/landing_screen_bloc.dart';
 import 'package:study_circle/profile/bloc/image_picker/image_picker_bloc.dart';
+import 'package:study_circle/profile/bloc/update_user/update_user_bloc.dart';
 import 'package:study_circle/profile/profile.dart';
-import 'package:study_circle/profile/repository/image_repository.dart';
+import 'package:study_circle/profile/services/image_service.dart';
+import 'package:study_circle/profile/services/user_service.dart';
 
 List<BottomNavigationBarItem> bottomNavItems = const <BottomNavigationBarItem>[
   BottomNavigationBarItem(
@@ -47,7 +49,9 @@ List<Widget> bottomNavScreen(BuildContext context) {
       providers: [
         BlocProvider(
             create: (context) =>
-                ImagePickerBloc(databaseHelper: ImageRepository()))
+                ImagePickerBloc(databaseHelper: ImageService())),
+        BlocProvider(
+            create: (context) => UpdateUserBloc(userService: UserService()))
       ],
       child: ProfilePage(),
     ),

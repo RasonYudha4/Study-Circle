@@ -2,13 +2,13 @@ import 'dart:typed_data';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
-class ImageRepository {
-  static final ImageRepository _instance = ImageRepository._internal();
-  factory ImageRepository() => _instance;
+class ImageService {
+  static final ImageService _instance = ImageService._internal();
+  factory ImageService() => _instance;
 
   static Database? _database;
 
-  ImageRepository._internal();
+  ImageService._internal();
 
   Future<Database> get database async {
     if (_database != null) return _database!;

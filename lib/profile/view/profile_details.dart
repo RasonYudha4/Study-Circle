@@ -1,17 +1,38 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:study_circle/app/bloc/app_bloc.dart';
 import 'package:study_circle/home/widgets/avatar.dart';
 import 'package:study_circle/profile/bloc/image_picker/image_picker_bloc.dart';
+import 'package:study_circle/profile/bloc/update_user/update_user_bloc.dart';
 
-class ProfileDetails extends StatelessWidget {
+class ProfileDetails extends StatefulWidget {
   const ProfileDetails({super.key});
+
+  @override
+  State<ProfileDetails> createState() => _ProfileDetailsState();
+}
+
+class _ProfileDetailsState extends State<ProfileDetails> {
+  late TextEditingController _userNameController;
+  @override
+  void initState() {
+    super.initState();
+    _userNameController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _userNameController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final user = context.select((AppBloc bloc) => bloc.state.user);
+    _userNameController.text = user.name ?? '';
     return Scaffold(
       body: Stack(
         children: [
@@ -135,25 +156,31 @@ class ProfileDetails extends StatelessWidget {
               )),
           Positioned(
             top: 300,
-            left: 0,
-            right: 0,
+            left: 30,
+            right: 30,
             bottom: 0,
             child: TextFormField(
+              controller: _userNameController,
               decoration: InputDecoration(
-                hintText: user.name == '' ? 'user name' : user.name,
-                contentPadding: EdgeInsets.only(left: 10),
+                hintText: user.name == '' ? 'User Name' : user.name,
+                contentPadding: EdgeInsets.only(left: 20),
               ),
             ),
           ),
           Positioned(
             top: 800,
-            left: 0,
-            right: 0,
+            left: 50,
+            right: 50,
             bottom: 50,
             child: ElevatedButton(
               child: const Text('Update data'),
               onPressed: () {
-                // BlocProvider.of<GroupsBloc>(context).add(AddGroups(group));
+                print(_userNameController.text);
+                final User updatedUser =
+                    user.copyWith(id: user.id, name: _userNameController.text);
+                print(updatedUser);
+                BlocProvider.of<UpdateUserBloc>(context)
+                    .add(UpdateUserNameEvent(user: updatedUser));
                 Navigator.pop(context);
               },
             ),

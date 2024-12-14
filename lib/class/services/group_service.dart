@@ -9,27 +9,23 @@ class GroupService {
 
   Stream<List<Group>> getGroups() {
     return _groupsCollection.snapshots().asyncMap((snapshot) async {
-      // Create a list of futures to fetch user names
       List<Future<Group>> groupFutures = snapshot.docs.map((doc) async {
         Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-        String creatorId = data['creator']; // Get the creator ID
+        String creatorId = data['creator'];
 
-        // Fetch the creator's name using the UserService
         String? creatorName = await _userService.getUserNameById(creatorId);
 
         return Group(
           id: doc.id,
           invCode: data['invCode'],
           name: data['name'],
-          creator:
-              creatorName ?? creatorId, // Use creator name or fallback to ID
+          creator: creatorName ?? creatorId,
           date: List<String>.from(data['date'] ?? []),
           description: data['description'],
           members: data['members'],
         );
       }).toList();
 
-      // Wait for all group futures to complete
       return await Future.wait(groupFutures);
     });
   }
