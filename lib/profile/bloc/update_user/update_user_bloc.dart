@@ -15,19 +15,16 @@ class UpdateUserBloc extends Bloc<UpdateUserEvent, UpdateUserState> {
     on<FetchUpdatedUserEvent>(_fetchUpdatedUser);
   }
 
-  Future<void> _fetchUpdatedUser(
+  Future<User?> _fetchUpdatedUser(
       FetchUpdatedUserEvent event, Emitter<UpdateUserState> emit) async {
     try {
-      final userData = await _userService.fetchUserById(event.userId);
-      if (userData != null) {
-        final user = User.fromJson(userData); // Convert Map to User
-        emit(UpdateUserLoadedState(user: user)); // Emit loaded state with user
-      } else {
-        emit(UpdateUserErrorState(error: 'User  not found'));
-      }
+      final user = await _userService.getUserById(event.userId);
+      emit(UpdateUserLoadedState(user: user!));
+      print('Fetched user ${user}');
     } catch (e) {
-      emit(UpdateUserErrorState(error: 'Failed to fetch user'));
+      emit(UpdateUserErrorState(error: 'Failed to fetch username'));
     }
+    return null;
   }
 
   Future<void> _updateUserName(

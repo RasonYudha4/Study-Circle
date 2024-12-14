@@ -22,9 +22,9 @@ class User extends Equatable {
         photo: photo ?? this.photo);
   }
 
-  factory User.fromJson(Map<String, dynamic> json) {
+  factory User.fromJson(String id, Map<String, dynamic> json) {
     return User(
-      id: json['id'] as String,
+      id: id,
       email: json['email'] as String?,
       name: json['name'] as String?,
       photo: json['photo'] as String?,

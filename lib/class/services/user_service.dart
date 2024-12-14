@@ -13,6 +13,6 @@ class UserService {
       return data?['name'] as String?;
     }
 
-    return null; // Return null if the user does not exist
+    return null;
   }
 }
