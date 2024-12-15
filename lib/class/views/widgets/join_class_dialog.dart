@@ -19,7 +19,7 @@ class _JoinClassDialogState extends State<JoinClassDialog> {
 
   @override
   void dispose() {
-    _classCodeController.dispose(); // Dispose of the controller
+    _classCodeController.dispose();
     super.dispose();
   }
 
@@ -76,7 +76,7 @@ class _JoinClassDialogState extends State<JoinClassDialog> {
                       });
                     } else if (state is ScanError) {
                       return Text(
-                        'Error: ${state.message}', // Display error message
+                        'Error: ${state.message}',
                         textAlign: TextAlign.center,
                         style: TextStyle(color: Colors.red),
                       );
@@ -90,18 +90,11 @@ class _JoinClassDialogState extends State<JoinClassDialog> {
             BlocListener<GroupsBloc, GroupsState>(
               listener: (context, state) {
                 if (state is GroupLoaded) {
-                  print('New member ID (test): ${user.id}');
-                  // Create updated group with new member ID
                   final Group updatedGroup = state.group!.copyWith(
                     invCode: _classCodeController.text,
                     newMemberId: user.id,
                   );
 
-                  print('New member ID (test): ${user.id}');
-                  print('New member ID : ${updatedGroup.newMemberId}');
-                  print('Classcode Group : ${updatedGroup.invCode}');
-
-                  // Add the event to the Bloc to join the group
                   BlocProvider.of<GroupsBloc>(context)
                       .add(JoinedGroup(updatedGroup));
                   Navigator.of(context).pop();

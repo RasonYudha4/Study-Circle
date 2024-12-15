@@ -1,6 +1,3 @@
-import 'package:authentication_repository/authentication_repository.dart';
-import 'package:study_circle/class/views/pages/class_page.dart';
-
 class Group {
   String? id;
   String invCode;
@@ -32,8 +29,12 @@ class Group {
       creator: data['creator'] as String?,
       newMemberId: data['newMemberId'] as String?,
       date: (data['date'] as List<dynamic>?)?.map((e) => e as String).toList(),
-      members:
-          (data['members'] as List<dynamic>?)?.map((e) => e as String).toList(),
+      members: (data['members'] as List<dynamic>?)
+              ?.map((e) => e != null
+                  ? e as String
+                  : '') // Check for null and provide a default value
+              .toList() ??
+          [],
       quizzes:
           (data['quizzes'] as List<dynamic>?)?.map((e) => e as String).toList(),
     );
@@ -62,6 +63,7 @@ class Group {
         date: date ?? this.date,
         description: description ?? this.description,
         members: updatedMembers,
+        newMemberId: newMemberId ?? this.newMemberId,
         quizzes: quizzes ?? this.quizzes);
   }
 }

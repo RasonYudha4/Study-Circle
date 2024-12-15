@@ -25,12 +25,10 @@ class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
         try {
           emit(GroupsLoading());
 
-          // Fetch the group by invitation code
           final group =
               await _GroupService.getGroupByInvCode(event.group.invCode);
 
           if (group != null) {
-            // Update the group in Firestore, including newMemberId
             await _GroupService.updateGroup(group);
 
             print('Bloc reached: ${group}');
