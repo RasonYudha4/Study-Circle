@@ -20,6 +20,30 @@ class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
       }
     });
 
+    on<GetGroupByInvCode>(
+      (event, emit) async {
+        try {
+          emit(GroupsLoading());
+
+          // Fetch the group by invitation code
+          final group =
+              await _GroupService.getGroupByInvCode(event.group.invCode);
+
+          if (group != null) {
+            // Update the group in Firestore, including newMemberId
+            await _GroupService.updateGroup(group);
+
+            print('Bloc reached: ${group}');
+            emit(GroupLoaded(group));
+          } else {
+            emit(GroupsError('Group not found'));
+          }
+        } catch (e) {
+          emit(GroupsError('Error fetching group: $e'));
+        }
+      },
+    );
+
     on<AddGroups>(
       (event, emit) async {
         try {
@@ -32,10 +56,24 @@ class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
       },
     );
 
+    on<JoinedGroup>((event, emit) async {
+      try {
+        emit(GroupsLoading());
+        Group updatedGroup =
+            event.group.copyWith(newMemberId: event.group.newMemberId);
+        await _GroupService.joinGroup(updatedGroup);
+        print(updatedGroup.newMemberId);
+        emit(GroupsOperationSuccess('Class join successfully'));
+      } catch (e) {
+        emit(GroupsError('Failed to join class'));
+      }
+    });
+
     on<UpdateGroup>(
       (event, emit) async {
         try {
           emit(GroupsLoading());
+          print('Updating group: ${event.group.name}');
           await _GroupService.updateGroup(event.group);
           emit(GroupsOperationSuccess('Class updated successfully'));
         } catch (e) {

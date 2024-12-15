@@ -4,9 +4,10 @@ import 'package:study_circle/class/views/pages/class_page.dart';
 class Group {
   String? id;
   String invCode;
-  String name;
-  String description;
+  String? name;
+  String? description;
   String? creator;
+  String? newMemberId;
   List<String>? date;
   List<String>? members;
   List<String>? quizzes;
@@ -15,11 +16,28 @@ class Group {
       {this.id,
       this.creator,
       required this.invCode,
-      required this.name,
+      this.name,
+      this.newMemberId,
       this.date,
-      required this.description,
+      this.description,
       this.members,
       this.quizzes});
+
+  factory Group.fromMap(Map<String, dynamic> data, {String? id}) {
+    return Group(
+      id: id, // Cast to String? to handle null
+      invCode: data['invCode'] as String, // Required field
+      name: data['name'] as String?,
+      description: data['description'] as String?,
+      creator: data['creator'] as String?,
+      newMemberId: data['newMemberId'] as String?,
+      date: (data['date'] as List<dynamic>?)?.map((e) => e as String).toList(),
+      members:
+          (data['members'] as List<dynamic>?)?.map((e) => e as String).toList(),
+      quizzes:
+          (data['quizzes'] as List<dynamic>?)?.map((e) => e as String).toList(),
+    );
+  }
 
   Group copyWith({
     String? id,
@@ -30,7 +48,12 @@ class Group {
     String? description,
     List<String>? members,
     List<String>? quizzes,
+    String? newMemberId,
   }) {
+    List<String> updatedMembers = members ?? this.members ?? [];
+    if (newMemberId != null && !updatedMembers.contains(newMemberId)) {
+      updatedMembers = List.from(updatedMembers)..add(newMemberId);
+    }
     return Group(
         id: id ?? this.id,
         invCode: invCode ?? this.invCode,
@@ -38,7 +61,7 @@ class Group {
         creator: creator ?? this.creator,
         date: date ?? this.date,
         description: description ?? this.description,
-        members: members ?? this.members,
+        members: updatedMembers,
         quizzes: quizzes ?? this.quizzes);
   }
 }

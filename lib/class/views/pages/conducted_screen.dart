@@ -53,8 +53,8 @@ class _ConductedScreenState extends State<ConductedScreen> {
                         children: [
                           ConductedClassCard(
                               id: group.id,
-                              classDescription: group.description,
-                              classTitle: group.name,
+                              classDescription: group.description!,
+                              classTitle: group.name!,
                               code: group.invCode.toString()),
                           SizedBox(
                             height: 16,

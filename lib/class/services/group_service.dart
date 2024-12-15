@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:study_circle/class/blocs/groups/groups_bloc.dart';
 import 'package:study_circle/class/models/group.dart';
 import 'package:study_circle/class/services/user_service.dart';
 
@@ -22,12 +23,30 @@ class GroupService {
           creator: creatorName ?? creatorId,
           date: List<String>.from(data['date'] ?? []),
           description: data['description'],
-          members: data['members'],
+          members: (data['members'] as List<dynamic>?)
+                  ?.map((e) => e != null ? e as String : '')
+                  .toList() ??
+              [],
         );
       }).toList();
 
       return await Future.wait(groupFutures);
     });
+  }
+
+  Future<Group?> getGroupByInvCode(String invCode) async {
+    QuerySnapshot querySnapshot =
+        await _groupsCollection.where("invCode", isEqualTo: invCode).get();
+    if (querySnapshot.docs.isNotEmpty) {
+      var groupData = querySnapshot.docs.first.data() as Map<String, dynamic>;
+      String documentId = querySnapshot.docs.first.id;
+      print('Group Id : $documentId');
+      print('Group Data: $groupData');
+      return Group.fromMap(groupData, id: documentId);
+    } else {
+      print('No group found with invCode: ${invCode}');
+    }
+    return null;
   }
 
   Future<void> addGroup(Group group) {
@@ -41,14 +60,24 @@ class GroupService {
     });
   }
 
+  Future<void> joinGroup(Group group) async {
+    QuerySnapshot querySnapshot = await _groupsCollection
+        .where("invCode", isEqualTo: group.invCode)
+        .get();
+    print('New Member Id: ${group.newMemberId}');
+    return _groupsCollection.doc(querySnapshot.docs.first.id).update({
+      'members': FieldValue.arrayUnion([group.newMemberId])
+    });
+  }
+
   Future<void> updateGroup(Group group) {
     return _groupsCollection.doc(group.id).update({
       'name': group.name,
       'invCode': group.invCode,
       'date': group.date,
       'description': group.description,
-      'members': group.members,
-      'quizzes': group.quizzes
+      'quizzes': group.quizzes,
+      'newMemberId': group.newMemberId,
     });
   }
 

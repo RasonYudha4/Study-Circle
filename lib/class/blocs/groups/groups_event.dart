@@ -11,6 +11,12 @@ class DeleteAllGroups extends GroupsEvent {}
 
 class LoadGroups extends GroupsEvent {}
 
+class GetGroupByInvCode extends GroupsEvent {
+  final Group group;
+
+  GetGroupByInvCode(this.group);
+}
+
 class AddGroups extends GroupsEvent {
   final Group group;
 
@@ -21,6 +27,12 @@ class UpdateGroup extends GroupsEvent {
   final Group group;
 
   UpdateGroup(this.group);
+}
+
+class JoinedGroup extends GroupsEvent {
+  final Group group;
+
+  JoinedGroup(this.group);
 }
 
 class DeleteGroup extends GroupsEvent {

@@ -17,6 +17,12 @@ class GroupsLoaded extends GroupsState {
   GroupsLoaded(this.groups);
 }
 
+class GroupLoaded extends GroupsState {
+  final Group? group;
+
+  GroupLoaded(this.group);
+}
+
 class GroupsOperationSuccess extends GroupsState {
   final String message;
 

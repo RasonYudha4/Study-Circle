@@ -44,8 +44,8 @@ class JoinedScreen extends StatelessWidget {
                         JoinedClassCard(
                             id: group.id,
                             creator: group.creator ?? '',
-                            classDescription: group.description,
-                            classTitle: group.name,
+                            classDescription: group.description!,
+                            classTitle: group.name!,
                             code: group.invCode.toString()),
                         SizedBox(
                           height: 16,

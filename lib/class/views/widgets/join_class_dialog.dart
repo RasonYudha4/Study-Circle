@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:study_circle/app/bloc/app_bloc.dart';
+import 'package:study_circle/class/blocs/groups/groups_bloc.dart';
 import 'package:study_circle/class/blocs/scan/scan_bloc.dart';
+import 'package:study_circle/class/models/group.dart';
 
 class JoinClassDialog extends StatefulWidget {
   @override
@@ -9,6 +12,11 @@ class JoinClassDialog extends StatefulWidget {
 
 class _JoinClassDialogState extends State<JoinClassDialog> {
   final _classCodeController = TextEditingController();
+  late Group currentGroup = Group(invCode: _classCodeController.text);
+  void initState() {
+    super.initState();
+  }
+
   @override
   void dispose() {
     _classCodeController.dispose(); // Dispose of the controller
@@ -17,6 +25,7 @@ class _JoinClassDialogState extends State<JoinClassDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final user = context.select((AppBloc bloc) => bloc.state.user);
     return Dialog(
       backgroundColor: Colors.white,
       shape: RoundedRectangleBorder(
@@ -78,16 +87,39 @@ class _JoinClassDialogState extends State<JoinClassDialog> {
               ],
             ),
             SizedBox(height: 60),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                TextButton(
-                  child: Text('Join'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
+            BlocListener<GroupsBloc, GroupsState>(
+              listener: (context, state) {
+                if (state is GroupLoaded) {
+                  print('New member ID (test): ${user.id}');
+                  // Create updated group with new member ID
+                  final Group updatedGroup = state.group!.copyWith(
+                    invCode: _classCodeController.text,
+                    newMemberId: user.id,
+                  );
+
+                  print('New member ID (test): ${user.id}');
+                  print('New member ID : ${updatedGroup.newMemberId}');
+                  print('Classcode Group : ${updatedGroup.invCode}');
+
+                  // Add the event to the Bloc to join the group
+                  BlocProvider.of<GroupsBloc>(context)
+                      .add(JoinedGroup(updatedGroup));
+                  Navigator.of(context).pop();
+                }
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(
+                    child: Text('Join'),
+                    onPressed: () {
+                      print('Current Group InvCode: ${currentGroup.invCode}');
+                      BlocProvider.of<GroupsBloc>(context)
+                          .add(GetGroupByInvCode(currentGroup));
+                    },
+                  ),
+                ],
+              ),
             ),
           ],
         ),

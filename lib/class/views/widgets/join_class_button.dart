@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:study_circle/class/blocs/groups/groups_bloc.dart';
 import 'package:study_circle/class/blocs/scan/scan_bloc.dart';
+import 'package:study_circle/class/services/group_service.dart';
 
 import 'widgets.dart';
 
@@ -15,8 +17,11 @@ class JoinClass extends StatelessWidget {
         showDialog(
           context: context,
           builder: (BuildContext context) {
-            return BlocProvider(
-              create: (context) => ScanBloc(),
+            return MultiBlocProvider(
+              providers: [
+                BlocProvider(create: (context) => ScanBloc()),
+                BlocProvider(create: (context) => GroupsBloc(GroupService()))
+              ],
               child: JoinClassDialog(),
             );
           },
