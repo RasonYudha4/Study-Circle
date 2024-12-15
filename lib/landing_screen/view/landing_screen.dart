@@ -1,3 +1,4 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:study_circle/class/blocs/groups/groups_bloc.dart';
@@ -65,6 +66,9 @@ class LandingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<AuthenticationRepository>().storeUserData();
+    });
     return BlocConsumer<LandingScreenBloc, LandingScreenState>(
       listener: (context, state) {},
       builder: (context, state) {

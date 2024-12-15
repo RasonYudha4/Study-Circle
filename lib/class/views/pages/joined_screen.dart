@@ -33,6 +33,9 @@ class JoinedScreen extends StatelessWidget {
               );
             } else if (state is GroupsLoaded) {
               final List<Group> groups = state.groups;
+              if (groups.isEmpty) {
+                return NoGroupsScreen();
+              }
               return Column(
                 children: [
                   SizedBox(

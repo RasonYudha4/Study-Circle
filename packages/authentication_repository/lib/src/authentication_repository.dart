@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:cache/cache.dart';
@@ -8,7 +7,6 @@ import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:meta/meta.dart';
-import 'package:crypto/crypto.dart';
 
 /// {@template sign_up_with_email_and_password_failure}
 /// Thrown during the sign up process if a failure occurs.
@@ -202,18 +200,10 @@ class AuthenticationRepository {
   /// Throws a [SignUpWithEmailAndPasswordFailure] if an exception occurs.
   Future<void> signUp({required String email, required String password}) async {
     try {
-      firebase_auth.UserCredential userAuth =
-          await _firebaseAuth.createUserWithEmailAndPassword(
+      await _firebaseAuth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
-      String uid = userAuth.user!.uid;
-
-      final hashedPassword = _hashPassword(password);
-      await FirebaseFirestore.instance.collection('users').doc(uid).set({
-        'email': email,
-        'password': hashedPassword,
-      });
     } on firebase_auth.FirebaseAuthException catch (e) {
       throw SignUpWithEmailAndPasswordFailure.fromCode(e.code);
     } catch (_) {
@@ -221,10 +211,19 @@ class AuthenticationRepository {
     }
   }
 
-  String _hashPassword(String password) {
-    final bytes = utf8.encode(password); // Convert password to bytes
-    final digest = sha256.convert(bytes); // Hash the password
-    return digest.toString(); // Return the hashed password
+  Future<void> storeUserData() async {
+    final user = _firebaseAuth.currentUser;
+    final CollectionReference usersCollection =
+        FirebaseFirestore.instance.collection('users');
+    final DocumentReference userDocRef = usersCollection.doc(user!.uid);
+    final DocumentSnapshot userDoc = await userDocRef.get();
+    if (userDoc.exists) {
+      return;
+    }
+    await userDocRef.set({
+      'email': user.toUser.email,
+      'id': user.toUser.id,
+    });
   }
 
   /// Starts the Sign In with Google Flow.
