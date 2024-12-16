@@ -58,15 +58,6 @@ class JoinedScreen extends StatelessWidget {
                   })
                 ],
               );
-            } else if (state is GroupsOperationSuccess) {
-              _groupBloc.add(LoadGroups());
-              return Column(
-                children: [
-                  const Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                ],
-              );
             } else if (state is GroupsError) {
               return Column(
                 children: [Center(child: Text("Data Unloaded"))],

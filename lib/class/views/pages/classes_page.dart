@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:study_circle/app/app.dart';
 import 'package:study_circle/class/blocs/groups/groups_bloc.dart';
 import 'package:study_circle/class/blocs/selected/selected_bloc.dart';
+import 'package:study_circle/class/services/group_service.dart';
 
 import '../widgets/widgets.dart';
 import 'pages.dart';
@@ -46,7 +47,14 @@ class ClassesPage extends StatelessWidget {
                     if (state is Conducted) {
                       return ConductedScreen();
                     } else {
-                      return JoinedScreen();
+                      return BlocProvider(
+                        create: (context) {
+                          final groupsBloc = GroupsBloc(GroupService());
+                          groupsBloc.add(GetJoinedGroup(user.id));
+                          return groupsBloc;
+                        },
+                        child: JoinedScreen(),
+                      );
                     }
                   },
                 ),

@@ -67,15 +67,6 @@ class _ConductedScreenState extends State<ConductedScreen> {
                     })
                   ],
                 );
-              } else if (state is GroupsOperationSuccess) {
-                _groupBloc.add(LoadGroups());
-                return Column(
-                  children: [
-                    const Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  ],
-                );
               } else if (state is GroupsError) {
                 return Column(
                   children: [Center(child: Text("Data Unloaded"))],
@@ -86,6 +77,7 @@ class _ConductedScreenState extends State<ConductedScreen> {
                     SizedBox(
                       height: 16,
                     ),
+                    NoGroupsScreen()
                     // Place to store the cards
                   ],
                 );

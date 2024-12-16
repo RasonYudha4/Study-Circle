@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:study_circle/class/blocs/groups/groups_bloc.dart';
 import 'package:study_circle/class/models/group.dart';
 import 'package:study_circle/class/services/user_service.dart';
 
@@ -31,6 +32,31 @@ class GroupService {
 
       return await Future.wait(groupFutures);
     });
+  }
+
+  Future<List<Group>> getJoinedGroups(String memberId) async {
+    QuerySnapshot querySnapshot =
+        await _groupsCollection.where("members", arrayContains: memberId).get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      List<Group> groups = [];
+
+      for (var doc in querySnapshot.docs) {
+        var groupsData = doc.data() as Map<String, dynamic>;
+        String documentId = doc.id;
+
+        print('Group Id : $documentId');
+        print('Group Data: $groupsData');
+
+        groups.add(Group.fromMap(groupsData, id: documentId));
+      }
+
+      return groups;
+    } else {
+      print('User  with Id : ${memberId} has not joined any group yet');
+    }
+
+    return [];
   }
 
   Future<Group?> getGroupByInvCode(String invCode) async {

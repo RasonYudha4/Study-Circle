@@ -1,3 +1,4 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:study_circle/class/models/group.dart';
@@ -51,6 +52,16 @@ class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
         } catch (e) {
           emit(GroupsError('Failed to create class'));
         }
+      },
+    );
+
+    on<GetJoinedGroup>(
+      (event, emit) async {
+        try {
+          emit(GroupsLoading());
+          final groups = await _GroupService.getJoinedGroups(event.memberId);
+          emit(GroupsLoaded(groups));
+        } catch (e) {}
       },
     );
 

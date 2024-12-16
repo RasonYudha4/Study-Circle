@@ -35,6 +35,12 @@ class JoinedGroup extends GroupsEvent {
   JoinedGroup(this.group);
 }
 
+class GetJoinedGroup extends GroupsEvent {
+  final String memberId;
+
+  GetJoinedGroup(this.memberId);
+}
+
 class DeleteGroup extends GroupsEvent {
   final String groupId;
 
