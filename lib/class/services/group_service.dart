@@ -34,10 +34,10 @@ class GroupService {
     });
   }
 
-  Future<List<Group>> getJoinedGroups(String memberId) async {
+  Future<List<Group>> getConductedGroups(String creator) async {
     QuerySnapshot querySnapshot =
-        await _groupsCollection.where("members", arrayContains: memberId).get();
-
+        await _groupsCollection.where("creator", isEqualTo: creator).get();
+    print("Searching for groups with creator: $creator");
     if (querySnapshot.docs.isNotEmpty) {
       List<Group> groups = [];
 
@@ -50,6 +50,47 @@ class GroupService {
 
         groups.add(Group.fromMap(groupsData, id: documentId));
       }
+
+      return groups;
+    } else {
+      print('Group with creator Id : ${creator} does not exist');
+    }
+
+    return [];
+  }
+
+  Future<List<Group>> getJoinedGroups(String memberId) async {
+    QuerySnapshot querySnapshot =
+        await _groupsCollection.where("members", arrayContains: memberId).get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      List<Group> groups = [];
+
+      List<Future<void>> groupFutures = querySnapshot.docs.map((doc) async {
+        var groupsData = doc.data() as Map<String, dynamic>;
+        String creatorId = groupsData['creator'];
+        String documentId = doc.id;
+
+        String? creatorName = await _userService.getUserNameById(creatorId);
+
+        print('Group Id : $documentId');
+        print('Group Data: $groupsData');
+
+        groups.add(Group(
+          id: documentId,
+          invCode: groupsData['invCode'],
+          name: groupsData['name'],
+          creator: creatorName ?? creatorId,
+          date: List<String>.from(groupsData['date'] ?? []),
+          description: groupsData['description'],
+          members: (groupsData['members'] as List<dynamic>?)
+                  ?.map((e) => e != null ? e as String : '')
+                  .toList() ??
+              [],
+        ));
+      }).toList();
+
+      await Future.wait(groupFutures);
 
       return groups;
     } else {

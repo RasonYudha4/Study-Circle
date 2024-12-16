@@ -35,10 +35,16 @@ class JoinedGroup extends GroupsEvent {
   JoinedGroup(this.group);
 }
 
-class GetJoinedGroup extends GroupsEvent {
+class GetJoinedGroups extends GroupsEvent {
   final String memberId;
 
-  GetJoinedGroup(this.memberId);
+  GetJoinedGroups(this.memberId);
+}
+
+class GetConductedGroups extends GroupsEvent {
+  final String creator;
+
+  GetConductedGroups(this.creator);
 }
 
 class DeleteGroup extends GroupsEvent {

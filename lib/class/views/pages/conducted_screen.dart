@@ -4,22 +4,10 @@ import 'package:study_circle/class/blocs/groups/groups_bloc.dart';
 import 'package:study_circle/class/class.dart';
 import 'package:study_circle/class/models/group.dart';
 
-class ConductedScreen extends StatefulWidget {
+class ConductedScreen extends StatelessWidget {
   const ConductedScreen({Key? key}) : super(key: key);
   @override
-  State<ConductedScreen> createState() => _ConductedScreenState();
-}
-
-class _ConductedScreenState extends State<ConductedScreen> {
-  @override
-  void initState() {
-    BlocProvider.of<GroupsBloc>(context).add(LoadGroups());
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final GroupsBloc _groupBloc = BlocProvider.of<GroupsBloc>(context);
     return Container(
         width: double.infinity,
         padding: EdgeInsets.all(25),

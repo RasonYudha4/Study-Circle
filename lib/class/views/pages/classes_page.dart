@@ -15,7 +15,6 @@ class ClassesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
     final user = context.select((AppBloc bloc) => bloc.state.user);
     return Scaffold(
       backgroundColor: Color(0xFF8AA6A3),
@@ -42,21 +41,37 @@ class ClassesPage extends StatelessWidget {
                 height: 20,
               ),
               Expanded(
-                child: BlocBuilder<SelectedBloc, SelectedState>(
-                  builder: (context, state) {
-                    if (state is Conducted) {
-                      return ConductedScreen();
+                child: BlocProvider(
+                  create: (context) {
+                    final groupsBloc = GroupsBloc(GroupService());
+                    // Dispatch the initial event based on the initial state
+                    final initialState = context.read<SelectedBloc>().state;
+                    if (initialState is Conducted) {
+                      groupsBloc.add(GetConductedGroups(user.id));
                     } else {
-                      return BlocProvider(
-                        create: (context) {
-                          final groupsBloc = GroupsBloc(GroupService());
-                          groupsBloc.add(GetJoinedGroup(user.id));
-                          return groupsBloc;
-                        },
-                        child: JoinedScreen(),
-                      );
+                      groupsBloc.add(GetJoinedGroups(user.id));
                     }
+                    return groupsBloc;
                   },
+                  child: BlocListener<SelectedBloc, SelectedState>(
+                    listener: (context, state) {
+                      final groupsBloc = context.read<GroupsBloc>();
+                      if (state is Conducted) {
+                        groupsBloc.add(GetConductedGroups(user.id));
+                      } else {
+                        groupsBloc.add(GetJoinedGroups(user.id));
+                      }
+                    },
+                    child: BlocBuilder<SelectedBloc, SelectedState>(
+                      builder: (context, state) {
+                        if (state is Conducted) {
+                          return ConductedScreen();
+                        } else {
+                          return JoinedScreen();
+                        }
+                      },
+                    ),
+                  ),
                 ),
               )
             ],

@@ -1,4 +1,3 @@
-import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:study_circle/class/models/group.dart';
@@ -55,13 +54,27 @@ class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
       },
     );
 
-    on<GetJoinedGroup>(
+    on<GetConductedGroups>(
+      (event, emit) async {
+        try {
+          emit(GroupsLoading());
+          final groups = await _GroupService.getConductedGroups(event.creator);
+          emit(GroupsLoaded(groups));
+        } catch (e) {
+          emit(GroupsError('Failed to fetch class'));
+        }
+      },
+    );
+
+    on<GetJoinedGroups>(
       (event, emit) async {
         try {
           emit(GroupsLoading());
           final groups = await _GroupService.getJoinedGroups(event.memberId);
           emit(GroupsLoaded(groups));
-        } catch (e) {}
+        } catch (e) {
+          emit(GroupsError('Failed to fetch class'));
+        }
       },
     );
 

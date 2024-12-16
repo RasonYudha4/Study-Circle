@@ -36,15 +36,3 @@ class App extends StatelessWidget {
     );
   }
 }
-
-// class AppView extends StatelessWidget {
-//   const AppView({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return FlowBuilder<AppStatus>(
-//       state: context.select((AppBloc bloc) => bloc.state.status),
-//       onGeneratePages: onGenerateAppViewPages,
-//     );
-//   }
-// }

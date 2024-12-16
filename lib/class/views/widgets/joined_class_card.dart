@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:study_circle/class/views/pages/pages.dart';
 
 class JoinedClassCard extends StatelessWidget {
   const JoinedClassCard({
@@ -19,7 +20,14 @@ class JoinedClassCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        print("Clicked");
+        Navigator.push(
+          context,
+          MaterialPageRoute<void>(
+            builder: (BuildContext context) {
+              return const ClassPage();
+            },
+          ),
+        );
       },
       child: Container(
         width: 400,

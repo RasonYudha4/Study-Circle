@@ -2,14 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:study_circle/class/blocs/groups/groups_bloc.dart';
 import 'package:study_circle/class/models/group.dart';
-import 'package:study_circle/class/views/pages/class_page.dart';
 
 import '../widgets/widgets.dart';
 
 class JoinedScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final GroupsBloc _groupBloc = BlocProvider.of<GroupsBloc>(context);
     return Container(
       width: double.infinity,
       padding: EdgeInsets.all(25),
