@@ -30,6 +30,14 @@ class QuizLoadedById extends QuizState {
   QuizLoadedById(this.quiz);
 }
 
+class QuizLoadedByGroupId extends QuizState {
+  final List<Quiz> quizzes;
+
+  QuizLoadedByGroupId(this.quizzes);
+  @override
+  List<Object> get props => [quizzes];
+}
+
 class QuizError extends QuizState {
   final String message;
 

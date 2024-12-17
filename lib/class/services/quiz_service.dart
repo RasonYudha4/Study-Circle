@@ -17,6 +17,41 @@ class QuizService {
     }
   }
 
+  Future<List<Quiz>> getAllQuizByGroupId(String groupId) async {
+    try {
+      QuerySnapshot snapshot =
+          await _quizCollection.where("groupId", isEqualTo: groupId).get();
+      List<Quiz> quizzes = snapshot.docs.map((doc) {
+        return Quiz.fromMap(doc.data() as Map<String, dynamic>);
+      }).toList();
+
+      return quizzes;
+    } catch (e) {
+      return [];
+    }
+  }
+
+  Future<void> updateQuizScore(String id, String userId, int newScore) async {
+    try {
+      DocumentSnapshot snapshot = await _quizCollection.doc(id).get();
+      if (snapshot.exists) {
+        Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
+
+        Map<String, int> scores = Map<String, int>.from(data['scores'] ?? {});
+
+        scores[userId] = newScore;
+
+        await _quizCollection.doc(id).update({
+          'scores': scores,
+        });
+      } else {
+        print("Quiz document does not exist.");
+      }
+    } catch (e) {
+      print("Error updating quiz: $e");
+    }
+  }
+
   Future<void> deleteAllQuizzes() async {
     QuerySnapshot snapshot = await _quizCollection.get();
     WriteBatch batch = FirebaseFirestore.instance.batch();

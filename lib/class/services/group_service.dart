@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:study_circle/class/blocs/groups/groups_bloc.dart';
 import 'package:study_circle/class/models/group.dart';
 import 'package:study_circle/class/services/user_service.dart';
 
@@ -53,7 +52,6 @@ class GroupService {
   Future<List<Group>> getConductedGroups(String creator) async {
     QuerySnapshot querySnapshot =
         await _groupsCollection.where("creator", isEqualTo: creator).get();
-    print("Searching for groups with creator: $creator");
     if (querySnapshot.docs.isNotEmpty) {
       List<Group> groups = [];
 

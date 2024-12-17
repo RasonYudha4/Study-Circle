@@ -7,7 +7,7 @@ abstract class QuizEvent extends Equatable {
 
 class LoadQuizEvent extends QuizEvent {}
 
-class DeleteAllQuizzesEvent extends QuizEvent {}
+class DeleteAllAllQuizEvent extends QuizEvent {}
 
 class SubmitAnswerEvent extends QuizEvent {
   final String answer;
@@ -33,4 +33,18 @@ class GetQuizById extends QuizEvent {
   final String quizId;
 
   GetQuizById(this.quizId);
+}
+
+class GetAllQuizByGroupId extends QuizEvent {
+  final String groupId;
+
+  GetAllQuizByGroupId(this.groupId);
+}
+
+class UpdateQuizScoreEvent extends QuizEvent {
+  final String id;
+  final String userId;
+  final int newScore;
+
+  UpdateQuizScoreEvent(this.id, this.userId, this.newScore);
 }
