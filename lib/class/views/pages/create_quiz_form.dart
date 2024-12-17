@@ -25,20 +25,38 @@ class _CreateQuizFormState extends State<CreateQuizForm> {
       body: BlocListener<QuizBloc, QuizState>(
         listener: (context, state) {
           if (state is QuizOperationSuccess) {
-            // Show a SnackBar when the quiz is created successfully
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text('Quiz created successfully!'),
+                content: Container(
+                  height: 50,
+                  child: Row(
+                    children: [
+                      Icon(Icons.check_circle, color: Colors.white),
+                      SizedBox(width: 10),
+                      Expanded(
+                        child: Text(
+                          'Quiz created successfully!',
+                          style: TextStyle(color: Colors.white, fontSize: 16),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                backgroundColor: Colors.green, // Custom background color
                 duration: Duration(seconds: 2),
+                behavior: SnackBarBehavior
+                    .floating, // Optional: makes the SnackBar float
+                shape: RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.circular(10), // Custom border radius
+                ),
               ),
             );
 
-            // Navigate back to the previous page after a short delay
             Future.delayed(Duration(seconds: 2), () {
               Navigator.pop(context);
             });
           } else if (state is QuizError) {
-            // Show an error message if there was an error
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(state.message),

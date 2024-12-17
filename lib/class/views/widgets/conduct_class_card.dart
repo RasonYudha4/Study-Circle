@@ -83,7 +83,7 @@ class _ConductedClassCardState extends State<ConductedClassCard> {
                     if (value == 'delete') {
                       BlocProvider.of<GroupsBloc>(context)
                           .add(DeleteGroup(widget.id!));
-                    } else if (value == 'option2') {
+                    } else if (value == 'add') {
                       ShowDateCalenddar(context).then((onValue) {
                         _selectedDateController.text =
                             onValue.toLocal().toString().split(' ')[0];
