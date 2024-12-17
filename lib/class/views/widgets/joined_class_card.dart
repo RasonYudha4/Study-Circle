@@ -24,7 +24,7 @@ class JoinedClassCard extends StatelessWidget {
           context,
           MaterialPageRoute<void>(
             builder: (BuildContext context) {
-              return const ClassPage();
+              return const JoinedClassPage();
             },
           ),
         );

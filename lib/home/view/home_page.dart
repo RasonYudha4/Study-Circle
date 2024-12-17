@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:study_circle/app/app.dart';
-import 'package:study_circle/home/home.dart';
 import 'package:study_circle/notification/view/notication_page.dart';
 
 class HomePage extends StatelessWidget {
@@ -11,9 +8,6 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-    final user = context.select((AppBloc bloc) => bloc.state.user);
-
     return Scaffold(
       backgroundColor: Color(0xFF8AA6A3),
       body: Column(

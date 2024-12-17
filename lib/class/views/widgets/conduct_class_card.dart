@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:study_circle/class/blocs/groups/groups_bloc.dart';
 import 'package:study_circle/class/models/group.dart';
+import 'package:study_circle/class/views/pages/conducted_class_page.dart';
 import 'package:study_circle/class/views/widgets/widgets.dart';
 
 class ConductedClassCard extends StatefulWidget {
@@ -39,7 +40,14 @@ class _ConductedClassCardState extends State<ConductedClassCard> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        print("Clicked");
+        Navigator.push(
+          context,
+          MaterialPageRoute<void>(
+            builder: (BuildContext context) {
+              return const ConductedClassPage();
+            },
+          ),
+        );
       },
       child: Container(
         width: 400,
