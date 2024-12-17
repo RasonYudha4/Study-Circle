@@ -2,10 +2,12 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:study_circle/class/blocs/groups/groups_bloc.dart';
+import 'package:study_circle/class/blocs/quiz/quiz_bloc.dart';
 import 'package:study_circle/class/blocs/scan/scan_bloc.dart';
 import 'package:study_circle/class/blocs/selected/selected_bloc.dart';
 import 'package:study_circle/class/class.dart';
 import 'package:study_circle/class/services/group_service.dart';
+import 'package:study_circle/class/services/quiz_service.dart';
 import 'package:study_circle/home/home.dart';
 import 'package:study_circle/landing_screen/bloc/landing_screen_bloc.dart';
 import 'package:study_circle/profile/bloc/image_picker/image_picker_bloc.dart';
@@ -42,7 +44,8 @@ List<Widget> bottomNavScreen(BuildContext context) {
         ),
         BlocProvider(
           create: (context) => GroupsBloc(GroupService()),
-        )
+        ),
+        BlocProvider(create: (context) => QuizBloc(QuizService()))
       ],
       child: ClassesPage(),
     ),

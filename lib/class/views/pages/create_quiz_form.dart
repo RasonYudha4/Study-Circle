@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:study_circle/class/blocs/quiz/quiz_bloc.dart';
 
 class CreateQuizForm extends StatefulWidget {
   const CreateQuizForm({super.key});
@@ -8,204 +10,176 @@ class CreateQuizForm extends StatefulWidget {
 }
 
 class _CreateQuizFormState extends State<CreateQuizForm> {
+  final TextEditingController _quizTitleController = TextEditingController();
+  final List<TextEditingController> _questionControllers =
+      List.generate(5, (_) => TextEditingController());
+  final List<List<TextEditingController>> _optionControllers =
+      List.generate(5, (_) => List.generate(4, (_) => TextEditingController()));
+  final List<TextEditingController> _answerControllers =
+      List.generate(5, (_) => TextEditingController());
+
   @override
   Widget build(BuildContext context) {
-    TextEditingController _quizTitleController = TextEditingController();
-    TextEditingController _question1Controller = TextEditingController();
-    TextEditingController _question2Controller = TextEditingController();
-    TextEditingController _question3Controller = TextEditingController();
-    TextEditingController _question4Controller = TextEditingController();
-    TextEditingController _question5Controller = TextEditingController();
-    TextEditingController _option1Question1Controller = TextEditingController();
-    TextEditingController _option2Question1Controller = TextEditingController();
-    TextEditingController _option3Question1Controller = TextEditingController();
-    TextEditingController _option4Question1Controller = TextEditingController();
-    TextEditingController _option1Question2Controller = TextEditingController();
-    TextEditingController _option2Question2Controller = TextEditingController();
-    TextEditingController _option3Question2Controller = TextEditingController();
-    TextEditingController _option4Question2Controller = TextEditingController();
-    TextEditingController _option1Question3Controller = TextEditingController();
-    TextEditingController _option2Question3Controller = TextEditingController();
-    TextEditingController _option3Question3Controller = TextEditingController();
-    TextEditingController _option4Question3Controller = TextEditingController();
-    TextEditingController _option1Question4Controller = TextEditingController();
-    TextEditingController _option2Question4Controller = TextEditingController();
-    TextEditingController _option3Question4Controller = TextEditingController();
-    TextEditingController _option4Question4Controller = TextEditingController();
-    TextEditingController _option1Question5Controller = TextEditingController();
-    TextEditingController _option2Question5Controller = TextEditingController();
-    TextEditingController _option3Question5Controller = TextEditingController();
-    TextEditingController _option4Question5Controller = TextEditingController();
-    TextEditingController _ans1Controller = TextEditingController();
-    TextEditingController _ans2Controller = TextEditingController();
-    TextEditingController _ans3Controller = TextEditingController();
-    TextEditingController _ans4Controller = TextEditingController();
-    TextEditingController _ans5Controller = TextEditingController();
-
     return Scaffold(
       backgroundColor: Color(0xFF127369),
-      body: Column(
-        children: [
-          SizedBox(
-            height: 30,
-          ),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                icon: const Icon(
-                  Icons.chevron_left_rounded,
-                  color: Colors.white,
-                  size: 40,
-                ),
+      body: BlocListener<QuizBloc, QuizState>(
+        listener: (context, state) {
+          if (state is QuizOperationSuccess) {
+            // Show a SnackBar when the quiz is created successfully
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Quiz created successfully!'),
+                duration: Duration(seconds: 2),
               ),
-              Spacer(),
-              Spacer(),
-              Padding(
-                padding: const EdgeInsets.only(
-                  top: 12,
-                ),
-                child: Text(
-                  "Class",
-                  style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
-                ),
+            );
+
+            // Navigate back to the previous page after a short delay
+            Future.delayed(Duration(seconds: 2), () {
+              Navigator.pop(context);
+            });
+          } else if (state is QuizError) {
+            // Show an error message if there was an error
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+                duration: Duration(seconds: 2),
               ),
-              Spacer(),
-              Spacer(),
-              Spacer()
-            ],
-          ),
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 3, top: 25),
-                    child: Text(
-                      "Create Quiz",
-                      style: TextStyle(
-                          fontSize: 19,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white),
-                    ),
+            );
+          }
+        },
+        child: Column(
+          children: [
+            SizedBox(height: 30),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: const Icon(
+                    Icons.chevron_left_rounded,
+                    color: Colors.white,
+                    size: 40,
                   ),
-                  SizedBox(
-                    height: 10,
+                ),
+                Spacer(),
+                Padding(
+                  padding: const EdgeInsets.only(top: 12),
+                  child: Text(
+                    "Class",
+                    style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
                   ),
-                  Container(
-                    height: 60,
-                    width: 380,
-                    decoration: BoxDecoration(
-                      color: Color(0xFFBFBFBF),
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.5),
-                          spreadRadius: 2,
-                          blurRadius: 2,
-                          offset: Offset(1, 3),
-                        ),
-                      ],
+                ),
+                Spacer(),
+              ],
+            ),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 3, top: 25),
+                      child: Text(
+                        "Create Quiz",
+                        style: TextStyle(
+                            fontSize: 19,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
+                      ),
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: TextFormField(
-                        controller: _quizTitleController,
-                        decoration: InputDecoration(
-                          hintText: "Enter Quiz Title",
-                          contentPadding: EdgeInsets.all(8),
+                    SizedBox(height: 10),
+                    Container(
+                      height: 60,
+                      width: 380,
+                      decoration: BoxDecoration(
+                        color: Color(0xFFBFBFBF),
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.black.withOpacity(0.5),
+                              spreadRadius: 2,
+                              blurRadius: 2,
+                              offset: Offset(1, 3)),
+                        ],
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: TextFormField(
+                          controller: _quizTitleController,
+                          decoration: InputDecoration(
+                              hintText: "Enter Quiz Title",
+                              contentPadding: EdgeInsets.all(8)),
                         ),
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  Input(
-                    questionNumber: "1",
-                    question: _question1Controller,
-                    option1: _option1Question1Controller,
-                    option2: _option2Question1Controller,
-                    option3: _option3Question1Controller,
-                    option4: _option4Question1Controller,
-                    ans: _ans1Controller,
-                  ),
-                  Input(
-                    questionNumber: "2",
-                    question: _question2Controller,
-                    option1: _option1Question2Controller,
-                    option2: _option2Question2Controller,
-                    option3: _option3Question2Controller,
-                    option4: _option4Question2Controller,
-                    ans: _ans2Controller,
-                  ),
-                  Input(
-                    questionNumber: "3",
-                    question: _question3Controller,
-                    option1: _option1Question3Controller,
-                    option2: _option2Question3Controller,
-                    option3: _option3Question3Controller,
-                    option4: _option4Question3Controller,
-                    ans: _ans3Controller,
-                  ),
-                  Input(
-                    questionNumber: "4",
-                    question: _question4Controller,
-                    option1: _option1Question4Controller,
-                    option2: _option2Question4Controller,
-                    option3: _option3Question4Controller,
-                    option4: _option4Question4Controller,
-                    ans: _ans4Controller,
-                  ),
-                  Input(
-                    questionNumber: "5",
-                    question: _question5Controller,
-                    option1: _option1Question5Controller,
-                    option2: _option2Question5Controller,
-                    option3: _option3Question5Controller,
-                    option4: _option4Question5Controller,
-                    ans: _ans5Controller,
-                  ),
-                ],
+                    SizedBox(height: 30),
+                    for (int i = 0; i < 5; i++)
+                      Input(
+                        questionNumber: (i + 1).toString(),
+                        question: _questionControllers[i],
+                        option1: _optionControllers[i][0],
+                        option2: _optionControllers[i][1],
+                        option3: _optionControllers[i][2],
+                        option4: _optionControllers[i][3],
+                        ans: _answerControllers[i],
+                      ),
+                  ],
+                ),
               ),
             ),
-          ),
-          Container(
-            height: 120,
-            color: Color(0xFF127369),
-            child: Center(
-              child: GestureDetector(
-                onTap: () {
-                  print("Quiz added");
-                  print("Question 1 : ${_question1Controller.text}");
-                  print("ans 1 : ${_ans1Controller.text}");
-                },
-                child: Container(
-                  height: 60,
-                  width: 300,
-                  decoration: BoxDecoration(
-                      color: Color(0xFF8AA6A3),
-                      borderRadius: BorderRadius.circular(20)),
-                  child: Center(
-                    child: Text(
-                      "Create Quiz",
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold),
+            Container(
+              height: 120,
+              color: Color(0xFF127369),
+              child: Center(
+                child: GestureDetector(
+                  onTap: () {
+                    // Gather data to create a quiz
+                    String title = _quizTitleController.text;
+                    List<Map<String, dynamic>> questions = [];
+
+                    for (int i = 0; i < 5; i++) {
+                      questions.add({
+                        'question': _questionControllers[i].text,
+                        'options': [
+                          _optionControllers[i][0].text,
+                          _optionControllers[i][1].text,
+                          _optionControllers[i][2].text,
+                          _optionControllers[i][3].text,
+                        ],
+                        'correctAnswer': _answerControllers[i].text,
+                      });
+                    }
+
+                    // Dispatch the CreateQuizEvent
+                    context
+                        .read<QuizBloc>()
+                        .add(CreateQuizEvent(title, questions));
+                  },
+                  child: Container(
+                    height: 60,
+                    width: 300,
+                    decoration: BoxDecoration(
+                        color: Color(0xFF8AA6A3),
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Center(
+                      child: Text(
+                        "Create Quiz",
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold),
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }

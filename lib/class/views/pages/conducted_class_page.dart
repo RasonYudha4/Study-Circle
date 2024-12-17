@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:study_circle/class/blocs/quiz/quiz_bloc.dart';
+import 'package:study_circle/class/services/quiz_service.dart';
 import 'package:study_circle/class/views/pages/pages.dart';
 import 'package:study_circle/class/views/widgets/widgets.dart';
 
@@ -104,7 +107,11 @@ class ConductedClassPage extends StatelessWidget {
                               context,
                               MaterialPageRoute<void>(
                                 builder: (BuildContext context) {
-                                  return const CreateQuizForm();
+                                  return BlocProvider(
+                                    create: (context) =>
+                                        QuizBloc(QuizService()),
+                                    child: CreateQuizForm(),
+                                  );
                                 },
                               ),
                             );

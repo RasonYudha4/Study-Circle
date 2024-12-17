@@ -44,7 +44,6 @@ class ClassesPage extends StatelessWidget {
                 child: BlocProvider(
                   create: (context) {
                     final groupsBloc = GroupsBloc(GroupService());
-                    // Dispatch the initial event based on the initial state
                     final initialState = context.read<SelectedBloc>().state;
                     if (initialState is Conducted) {
                       groupsBloc.add(GetConductedGroups(user.id));
