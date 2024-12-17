@@ -43,7 +43,7 @@ class ConductedScreen extends StatelessWidget {
                       return Column(
                         children: [
                           ConductedClassCard(
-                              id: group.id,
+                              id: group.id!,
                               classDescription: group.description!,
                               classTitle: group.name!,
                               code: group.invCode.toString()),

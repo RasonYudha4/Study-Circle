@@ -3,7 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:study_circle/class/blocs/quiz/quiz_bloc.dart';
 
 class CreateQuizForm extends StatefulWidget {
-  const CreateQuizForm({super.key});
+  final String groupId;
+  const CreateQuizForm({super.key, required this.groupId});
 
   @override
   State<CreateQuizForm> createState() => _CreateQuizFormState();
@@ -175,7 +176,7 @@ class _CreateQuizFormState extends State<CreateQuizForm> {
                     // Dispatch the CreateQuizEvent
                     context
                         .read<QuizBloc>()
-                        .add(CreateQuizEvent(title, questions));
+                        .add(CreateQuizEvent(title, questions, widget.groupId));
                   },
                   child: Container(
                     height: 60,

@@ -5,9 +5,11 @@ class Quiz {
   String title;
   List<Question> questions;
   Map<String, int> scores;
+  String groupId;
 
   Quiz(
       {required this.id,
+      required this.groupId,
       required this.title,
       required this.questions,
       required this.scores});
@@ -17,12 +19,14 @@ class Quiz {
       'title': title,
       'questions': questions.map((q) => q.toMap()).toList(),
       'scores': scores,
+      'groupId': groupId
     };
   }
 
   factory Quiz.fromMap(Map<String, dynamic> map) {
     return Quiz(
       id: map['id'] as String, // Extract the id from the map
+      groupId: map['groupId'] as String,
       title: map['title'] as String, // Extract the title
       questions: (map['questions'] as List<dynamic>)
           .map((q) => Question.fromMap(q as Map<String, dynamic>))

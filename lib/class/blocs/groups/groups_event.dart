@@ -17,6 +17,12 @@ class GetGroupByInvCode extends GroupsEvent {
   GetGroupByInvCode(this.group);
 }
 
+class GetGroupById extends GroupsEvent {
+  final String id;
+
+  GetGroupById(this.id);
+}
+
 class AddGroups extends GroupsEvent {
   final Group group;
 

@@ -5,6 +5,7 @@ class Group {
   String? description;
   String? creator;
   String? newMemberId;
+  String? newQuizId;
   List<String>? date;
   List<String>? members;
   List<String>? quizzes;
@@ -15,6 +16,7 @@ class Group {
       required this.invCode,
       this.name,
       this.newMemberId,
+      this.newQuizId,
       this.date,
       this.description,
       this.members,
@@ -50,10 +52,15 @@ class Group {
     List<String>? members,
     List<String>? quizzes,
     String? newMemberId,
+    String? newQuizId,
   }) {
     List<String> updatedMembers = members ?? this.members ?? [];
     if (newMemberId != null && !updatedMembers.contains(newMemberId)) {
       updatedMembers = List.from(updatedMembers)..add(newMemberId);
+    }
+    List<String> updatedQuizzes = quizzes ?? this.quizzes ?? [];
+    if (!updatedQuizzes.contains(newQuizId)) {
+      updatedQuizzes = List.from(updatedQuizzes)..add(newQuizId!);
     }
     return Group(
         id: id ?? this.id,
@@ -64,6 +71,6 @@ class Group {
         description: description ?? this.description,
         members: updatedMembers,
         newMemberId: newMemberId ?? this.newMemberId,
-        quizzes: quizzes ?? this.quizzes);
+        quizzes: updatedQuizzes);
   }
 }

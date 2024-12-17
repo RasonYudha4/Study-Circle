@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:study_circle/class/blocs/groups/groups_bloc.dart';
 import 'package:study_circle/class/blocs/quiz/quiz_bloc.dart';
+import 'package:study_circle/class/services/group_service.dart';
 import 'package:study_circle/class/services/quiz_service.dart';
 import 'package:study_circle/class/views/pages/pages.dart';
 import 'package:study_circle/class/views/widgets/widgets.dart';
 
 class ConductedClassPage extends StatelessWidget {
-  const ConductedClassPage({super.key});
+  final String id;
+  const ConductedClassPage({super.key, required this.id});
 
   @override
   Widget build(BuildContext context) {
@@ -107,10 +110,16 @@ class ConductedClassPage extends StatelessWidget {
                               context,
                               MaterialPageRoute<void>(
                                 builder: (BuildContext context) {
-                                  return BlocProvider(
-                                    create: (context) =>
-                                        QuizBloc(QuizService()),
-                                    child: CreateQuizForm(),
+                                  return MultiBlocProvider(
+                                    providers: [
+                                      BlocProvider(
+                                          create: (context) =>
+                                              QuizBloc(QuizService())),
+                                      BlocProvider(
+                                          create: (context) =>
+                                              GroupsBloc(GroupService()))
+                                    ],
+                                    child: CreateQuizForm(groupId: this.id),
                                   );
                                 },
                               ),

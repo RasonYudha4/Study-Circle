@@ -66,6 +66,16 @@ class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
       },
     );
 
+    on<GetGroupById>((event, emit) async {
+      try {
+        emit(GroupsLoading());
+        final group = await _GroupService.getGroupById(event.id);
+        emit(GroupLoaded(group));
+      } catch (e) {
+        emit(GroupsError('Failed to fetch class'));
+      }
+    });
+
     on<GetJoinedGroups>(
       (event, emit) async {
         try {

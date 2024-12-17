@@ -7,6 +7,8 @@ abstract class QuizEvent extends Equatable {
 
 class LoadQuizEvent extends QuizEvent {}
 
+class DeleteAllQuizzesEvent extends QuizEvent {}
+
 class SubmitAnswerEvent extends QuizEvent {
   final String answer;
 
@@ -19,8 +21,9 @@ class SubmitAnswerEvent extends QuizEvent {
 class CreateQuizEvent extends QuizEvent {
   final String title;
   final List<Map<String, dynamic>> questions;
+  final String groupId;
 
-  CreateQuizEvent(this.title, this.questions);
+  CreateQuizEvent(this.title, this.questions, this.groupId);
 
   @override
   List<Object> get props => [title, questions];

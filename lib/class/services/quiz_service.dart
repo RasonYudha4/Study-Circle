@@ -17,6 +17,16 @@ class QuizService {
     }
   }
 
+  Future<void> deleteAllQuizzes() async {
+    QuerySnapshot snapshot = await _quizCollection.get();
+    WriteBatch batch = FirebaseFirestore.instance.batch();
+
+    for (QueryDocumentSnapshot doc in snapshot.docs) {
+      batch.delete(doc.reference);
+    }
+    await batch.commit();
+  }
+
   Future<void> createQuiz(Quiz quiz) async {
     try {
       await _quizCollection.add(quiz.toMap());

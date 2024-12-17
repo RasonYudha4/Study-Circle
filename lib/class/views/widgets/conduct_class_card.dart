@@ -11,12 +11,12 @@ class ConductedClassCard extends StatefulWidget {
     required this.classDescription,
     required this.classTitle,
     required this.code,
-    this.id,
+    required this.id,
   });
   final String classDescription;
   final String classTitle;
   final String code;
-  final String? id;
+  final String id;
 
   @override
   State<ConductedClassCard> createState() => _ConductedClassCardState();
@@ -44,7 +44,7 @@ class _ConductedClassCardState extends State<ConductedClassCard> {
           context,
           MaterialPageRoute<void>(
             builder: (BuildContext context) {
-              return const ConductedClassPage();
+              return ConductedClassPage(id: widget.id);
             },
           ),
         );
@@ -82,7 +82,7 @@ class _ConductedClassCardState extends State<ConductedClassCard> {
                   onSelected: (String value) {
                     if (value == 'delete') {
                       BlocProvider.of<GroupsBloc>(context)
-                          .add(DeleteGroup(widget.id!));
+                          .add(DeleteGroup(widget.id));
                     } else if (value == 'add') {
                       ShowDateCalenddar(context).then((onValue) {
                         _selectedDateController.text =

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:study_circle/class/blocs/groups/groups_bloc.dart';
 import 'package:study_circle/class/models/group.dart';
 import 'package:study_circle/class/services/user_service.dart';
 
@@ -31,6 +32,22 @@ class GroupService {
 
       return await Future.wait(groupFutures);
     });
+  }
+
+  Future<Group> getGroupById(String id) async {
+    try {
+      DocumentSnapshot<Object?> snapshot =
+          await _groupsCollection.doc(id).get();
+      if (snapshot.exists) {
+        Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
+
+        return Group.fromMap(data, id: id);
+      } else {
+        throw Exception("Group not found");
+      }
+    } catch (e) {
+      throw Exception("Error fetching group: $e");
+    }
   }
 
   Future<List<Group>> getConductedGroups(String creator) async {
@@ -143,6 +160,7 @@ class GroupService {
       'description': group.description,
       'quizzes': group.quizzes,
       'newMemberId': group.newMemberId,
+      'newQuizId': group.newQuizId,
     });
   }
 
