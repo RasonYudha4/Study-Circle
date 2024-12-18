@@ -2,21 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:study_circle/class/blocs/groups/groups_bloc.dart';
 import 'package:study_circle/class/models/group.dart';
+import 'package:study_circle/class/services/group_service.dart';
 import 'package:study_circle/class/views/pages/conducted_class_page.dart';
 import 'package:study_circle/class/views/widgets/widgets.dart';
 
 class ConductedClassCard extends StatefulWidget {
   const ConductedClassCard({
     super.key,
-    required this.classDescription,
-    required this.classTitle,
-    required this.code,
-    required this.id,
+    required this.group,
   });
-  final String classDescription;
-  final String classTitle;
-  final String code;
-  final String id;
+  final Group group;
 
   @override
   State<ConductedClassCard> createState() => _ConductedClassCardState();
@@ -24,17 +19,6 @@ class ConductedClassCard extends StatefulWidget {
 
 class _ConductedClassCardState extends State<ConductedClassCard> {
   final TextEditingController _selectedDateController = TextEditingController();
-  late final Group currentGroup;
-
-  void initState() {
-    super.initState();
-    currentGroup = Group(
-      invCode: widget.code,
-      name: widget.classTitle,
-      date: [_selectedDateController.text],
-      description: widget.classDescription,
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +28,10 @@ class _ConductedClassCardState extends State<ConductedClassCard> {
           context,
           MaterialPageRoute<void>(
             builder: (BuildContext context) {
-              return ConductedClassPage(id: widget.id);
+              return BlocProvider(
+                create: (context) => GroupsBloc(GroupService()),
+                child: ConductedClassPage(id: widget.group.id!),
+              );
             },
           ),
         );
@@ -71,7 +58,7 @@ class _ConductedClassCardState extends State<ConductedClassCard> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  '${widget.classTitle}',
+                  '${widget.group.name}',
                   style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
@@ -82,13 +69,20 @@ class _ConductedClassCardState extends State<ConductedClassCard> {
                   onSelected: (String value) {
                     if (value == 'delete') {
                       BlocProvider.of<GroupsBloc>(context)
-                          .add(DeleteGroup(widget.id));
+                          .add(DeleteGroup(widget.group.id!));
                     } else if (value == 'add') {
                       ShowDateCalenddar(context).then((onValue) {
-                        _selectedDateController.text =
+                        String formattedDate =
                             onValue.toLocal().toString().split(' ')[0];
+                        _selectedDateController.text = formattedDate;
+
+                        List<String> updatedDates =
+                            List.from(widget.group.date ?? []);
+                        updatedDates.add(formattedDate);
+
                         final Group updateGroup =
-                            currentGroup.copyWith(date: [onValue.toString()]);
+                            widget.group.copyWith(date: updatedDates);
+
                         BlocProvider.of<GroupsBloc>(context)
                             .add(UpdateGroup(updateGroup));
                       });
@@ -113,7 +107,7 @@ class _ConductedClassCardState extends State<ConductedClassCard> {
           Padding(
             padding: const EdgeInsets.only(left: 25, top: 10, right: 25),
             child: Text(
-              '${widget.classDescription}',
+              '${widget.group.description}',
               textAlign: TextAlign.justify,
               style: TextStyle(color: Colors.black),
             ),

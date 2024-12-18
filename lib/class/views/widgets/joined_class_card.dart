@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:study_circle/class/blocs/groups/groups_bloc.dart';
+import 'package:study_circle/class/services/group_service.dart';
 import 'package:study_circle/class/views/pages/pages.dart';
 
 class JoinedClassCard extends StatelessWidget {
@@ -24,8 +27,11 @@ class JoinedClassCard extends StatelessWidget {
           context,
           MaterialPageRoute<void>(
             builder: (BuildContext context) {
-              return JoinedClassPage(
-                groupId: id!,
+              return BlocProvider(
+                create: (context) => GroupsBloc(GroupService()),
+                child: JoinedClassPage(
+                  groupId: id!,
+                ),
               );
             },
           ),

@@ -21,18 +21,35 @@ class AvailableQuizes extends StatelessWidget {
           final quizzes = state.quizzes;
 
           return Container(
-            height: 140,
+            height: 175,
             width: 380,
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Padding(
                 padding: const EdgeInsets.only(left: 5),
-                child: Row(
-                  children: quizzes.map((quiz) {
-                    return AvailableQuiz(
-                      quiz: quiz,
-                    );
-                  }).toList(),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Available quiz",
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      children: quizzes.isEmpty
+                          ? [
+                              NoQuizzesAvailable()
+                            ] // Show the empty state widget if quizzes is empty
+                          : quizzes.map((quiz) {
+                              return AvailableQuiz(
+                                quiz: quiz,
+                              );
+                            }).toList(),
+                    ),
+                  ],
                 ),
               ),
             ),

@@ -43,10 +43,8 @@ class ConductedScreen extends StatelessWidget {
                       return Column(
                         children: [
                           ConductedClassCard(
-                              id: group.id!,
-                              classDescription: group.description!,
-                              classTitle: group.name!,
-                              code: group.invCode.toString()),
+                            group: group,
+                          ),
                           SizedBox(
                             height: 16,
                           )
@@ -66,7 +64,6 @@ class ConductedScreen extends StatelessWidget {
                       height: 16,
                     ),
                     NoGroupsScreen()
-                    // Place to store the cards
                   ],
                 );
               }

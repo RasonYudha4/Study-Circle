@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:study_circle/class/views/widgets/widgets.dart';
 
 class MeetUps extends StatelessWidget {
+  final List<String> dates;
   const MeetUps({
     super.key,
+    required this.dates,
   });
 
   @override
@@ -26,12 +28,7 @@ class MeetUps extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.only(left: 5),
               child: Row(
-                children: [
-                  MeetUp(),
-                  MeetUp(),
-                  MeetUp(),
-                  MeetUp(),
-                ],
+                children: dates.map((date) => MeetUp(date: date)).toList(),
               ),
             ),
           ),

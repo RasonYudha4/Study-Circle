@@ -106,6 +106,7 @@ class GroupsBloc extends Bloc<GroupsEvent, GroupsState> {
         try {
           emit(GroupsLoading());
           print('Updating group: ${event.group.name}');
+          print('Updating group: ${event.group.id}');
           await _GroupService.updateGroup(event.group);
           emit(GroupsOperationSuccess('Class updated successfully'));
         } catch (e) {

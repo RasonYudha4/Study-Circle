@@ -26,6 +26,7 @@ dependencies:
   formz: ^0.7.0
   google_fonts: ^6.2.1
   image_picker: ^1.1.2
+  intl: ^0.20.1
   meta: ^1.15.0
   sqflite: ^2.4.1
 

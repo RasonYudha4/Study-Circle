@@ -3,15 +3,15 @@ import 'package:study_circle/class/class.dart';
 import 'package:study_circle/class/models/quiz.dart';
 import 'package:study_circle/class/views/pages/pages.dart';
 
-class QuizCardage extends StatefulWidget {
+class SubmitQuiz extends StatefulWidget {
   final Quiz quiz;
-  const QuizCardage({super.key, required this.quiz});
+  const SubmitQuiz({super.key, required this.quiz});
 
   @override
-  _QuizCardageState createState() => _QuizCardageState();
+  _SubmitQuizState createState() => _SubmitQuizState();
 }
 
-class _QuizCardageState extends State<QuizCardage> {
+class _SubmitQuizState extends State<SubmitQuiz> {
   PageController _pageController = PageController();
   int _currentPage = 0;
   String? _selectedOption;
@@ -21,11 +21,11 @@ class _QuizCardageState extends State<QuizCardage> {
   @override
   void initState() {
     super.initState();
-    // Initialize questions from the quiz data
+
     _questions = widget.quiz.questions.map((q) {
       return {
-        "question": q.question, // Assuming Question has a title
-        "options": q.options, // Assuming Question has options
+        "question": q.question,
+        "options": q.options,
       };
     }).toList();
   }
@@ -39,8 +39,7 @@ class _QuizCardageState extends State<QuizCardage> {
         curve: Curves.easeInOut,
       );
       setState(() {
-        _selectedOption =
-            null; // Reset selected option when moving to the next question
+        _selectedOption = null;
       });
     }
   }

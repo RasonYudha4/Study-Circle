@@ -2,7 +2,7 @@ class Question {
   String? id;
   String question;
   List<String> options;
-  String correctAnswer; //Sementara
+  String? correctAnswer; //Sementara
 
   Question(
       {this.id,
@@ -20,12 +20,10 @@ class Question {
 
   factory Question.fromMap(Map<String, dynamic> map) {
     return Question(
-      id: map['id'] as String?, // Extract the id from the map
-      question: map['question'] as String, // Extract the question
-      options: List<String>.from(
-          map['options'] as List<dynamic>), // Extract and convert options
-      correctAnswer:
-          map['correctAnswer'] as String, // Extract the correct answer
+      id: map['id'] as String?,
+      question: map['question'] as String,
+      options: List<String>.from(map['options'] as List<dynamic>),
+      correctAnswer: map['correctAnswer'] as String?,
     );
   }
 }
