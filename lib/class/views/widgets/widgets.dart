@@ -9,7 +9,7 @@ export 'select_bar.dart';
 export 'show_date_calendar.dart';
 export 'no_group.dart';
 export 'quiz_reviews.dart';
-export 'quiz.dart';
+export 'quiz_card.dart';
 export 'available_quizes.dart';
 export 'available_quiz.dart';
 export 'meetups.dart';

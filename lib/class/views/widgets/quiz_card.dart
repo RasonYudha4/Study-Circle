@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class Quiz extends StatelessWidget {
-  const Quiz({
+class QuizCard extends StatelessWidget {
+  const QuizCard({
     super.key,
   });
 

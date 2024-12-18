@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:study_circle/class/models/quiz.dart';
 import 'package:study_circle/class/views/pages/quiz_page.dart';
 
 class AvailableQuiz extends StatelessWidget {
+  final Quiz quiz;
   const AvailableQuiz({
     super.key,
+    required this.quiz,
   });
 
   @override
@@ -14,7 +17,9 @@ class AvailableQuiz extends StatelessWidget {
           context,
           MaterialPageRoute<void>(
             builder: (BuildContext context) {
-              return const QuizPage();
+              return QuizCardage(
+                quiz: quiz,
+              );
             },
           ),
         );
@@ -38,6 +43,7 @@ class AvailableQuiz extends StatelessWidget {
                   offset: Offset(1, 3),
                 ),
               ]),
+          child: Text(quiz.title),
         ),
       ),
     );

@@ -12,12 +12,15 @@ class CreateQuizForm extends StatefulWidget {
 
 class _CreateQuizFormState extends State<CreateQuizForm> {
   final TextEditingController _quizTitleController = TextEditingController();
+  final TextEditingController _quizDescController = TextEditingController();
   final List<TextEditingController> _questionControllers =
       List.generate(5, (_) => TextEditingController());
   final List<List<TextEditingController>> _optionControllers =
       List.generate(5, (_) => List.generate(4, (_) => TextEditingController()));
   final List<TextEditingController> _answerControllers =
       List.generate(5, (_) => TextEditingController());
+
+  String? _warningMessage;
 
   @override
   Widget build(BuildContext context) {
@@ -43,13 +46,11 @@ class _CreateQuizFormState extends State<CreateQuizForm> {
                     ],
                   ),
                 ),
-                backgroundColor: Colors.green, // Custom background color
+                backgroundColor: Colors.green,
                 duration: Duration(seconds: 2),
-                behavior: SnackBarBehavior
-                    .floating, // Optional: makes the SnackBar float
+                behavior: SnackBarBehavior.floating,
                 shape: RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.circular(10), // Custom border radius
+                  borderRadius: BorderRadius.circular(10),
                 ),
               ),
             );
@@ -135,6 +136,31 @@ class _CreateQuizFormState extends State<CreateQuizForm> {
                         ),
                       ),
                     ),
+                    SizedBox(height: 10),
+                    Container(
+                      height: 60,
+                      width: 380,
+                      decoration: BoxDecoration(
+                        color: Color(0xFFBFBFBF),
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.black.withOpacity(0.5),
+                              spreadRadius: 2,
+                              blurRadius: 2,
+                              offset: Offset(1, 3)),
+                        ],
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: TextFormField(
+                          controller: _quizDescController,
+                          decoration: InputDecoration(
+                              hintText: "Enter Quiz Description",
+                              contentPadding: EdgeInsets.all(8)),
+                        ),
+                      ),
+                    ),
                     SizedBox(height: 30),
                     for (int i = 0; i < 5; i++)
                       Input(
@@ -146,6 +172,15 @@ class _CreateQuizFormState extends State<CreateQuizForm> {
                         option4: _optionControllers[i][3],
                         ans: _answerControllers[i],
                       ),
+                    if (_warningMessage !=
+                        null) // Display warning message if exists
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          _warningMessage!,
+                          style: TextStyle(color: Colors.red, fontSize: 16),
+                        ),
+                      ),
                   ],
                 ),
               ),
@@ -156,9 +191,27 @@ class _CreateQuizFormState extends State<CreateQuizForm> {
               child: Center(
                 child: GestureDetector(
                   onTap: () {
-                    // Gather data to create a quiz
                     String title = _quizTitleController.text;
+                    String desc = _quizDescController.text;
                     List<Map<String, dynamic>> questions = [];
+
+                    if (title.isEmpty ||
+                        desc.isEmpty ||
+                        _questionControllers
+                            .any((controller) => controller.text.isEmpty) ||
+                        _optionControllers.any((options) => options
+                            .any((controller) => controller.text.isEmpty)) ||
+                        _answerControllers
+                            .any((controller) => controller.text.isEmpty)) {
+                      setState(() {
+                        _warningMessage = "Please fill in all fields.";
+                      });
+                      return;
+                    } else {
+                      setState(() {
+                        _warningMessage = null;
+                      });
+                    }
 
                     for (int i = 0; i < 5; i++) {
                       questions.add({
@@ -173,10 +226,8 @@ class _CreateQuizFormState extends State<CreateQuizForm> {
                       });
                     }
 
-                    // Dispatch the CreateQuizEvent
-                    context
-                        .read<QuizBloc>()
-                        .add(CreateQuizEvent(title, questions, widget.groupId));
+                    context.read<QuizBloc>().add(CreateQuizEvent(
+                        title, questions, widget.groupId, desc));
                   },
                   child: Container(
                     height: 60,

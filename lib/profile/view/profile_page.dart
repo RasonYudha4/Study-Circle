@@ -139,7 +139,7 @@ class LogoutButton extends StatelessWidget {
                 const Text(
                   "Log Out",
                   style: TextStyle(fontSize: 18, color: Colors.white),
-                )
+                ),
               ],
             ),
             Icon(

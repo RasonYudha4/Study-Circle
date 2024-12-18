@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:study_circle/class/views/pages/quiz_page.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:study_circle/class/blocs/quiz/quiz_bloc.dart';
+import 'package:study_circle/class/services/quiz_service.dart';
 import 'package:study_circle/class/views/widgets/widgets.dart';
 
 class JoinedClassPage extends StatelessWidget {
-  const JoinedClassPage({super.key});
+  final String groupId;
+  const JoinedClassPage({super.key, required this.groupId});
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +95,12 @@ class JoinedClassPage extends StatelessWidget {
                     child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      AvailableQuizes(),
+                      BlocProvider(
+                        create: (context) => QuizBloc(QuizService()),
+                        child: AvailableQuizes(
+                          groupId: groupId,
+                        ),
+                      ),
                       MeetUps(),
                       QuizReviews(),
                       SizedBox(

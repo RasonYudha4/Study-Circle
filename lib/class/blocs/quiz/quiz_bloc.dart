@@ -65,6 +65,7 @@ class QuizBloc extends Bloc<QuizEvent, QuizState> {
         Quiz newQuiz = Quiz(
           id: '',
           groupId: event.groupId,
+          description: event.description,
           title: event.title,
           questions: event.questions.map((q) => Question.fromMap(q)).toList(),
           scores: {},

@@ -2,7 +2,7 @@ class Question {
   String? id;
   String question;
   List<String> options;
-  String correctAnswer;
+  String correctAnswer; //Sementara
 
   Question(
       {this.id,

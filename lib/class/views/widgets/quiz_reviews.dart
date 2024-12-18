@@ -24,9 +24,9 @@ class QuizReviews extends StatelessWidget {
             padding: const EdgeInsets.only(left: 5),
             child: Column(
               children: [
-                Quiz(),
-                Quiz(),
-                Quiz(),
+                QuizCard(),
+                QuizCard(),
+                QuizCard(),
               ],
             ),
           ),

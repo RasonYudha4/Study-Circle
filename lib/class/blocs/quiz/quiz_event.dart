@@ -22,11 +22,12 @@ class CreateQuizEvent extends QuizEvent {
   final String title;
   final List<Map<String, dynamic>> questions;
   final String groupId;
+  final String description;
 
-  CreateQuizEvent(this.title, this.questions, this.groupId);
+  CreateQuizEvent(this.title, this.questions, this.groupId, this.description);
 
   @override
-  List<Object> get props => [title, questions];
+  List<Object> get props => [title, questions, description];
 }
 
 class GetQuizById extends QuizEvent {

@@ -156,9 +156,7 @@ class GroupService {
       'invCode': group.invCode,
       'date': group.date,
       'description': group.description,
-      'quizzes': group.quizzes,
       'newMemberId': group.newMemberId,
-      'newQuizId': group.newQuizId,
     });
   }
 

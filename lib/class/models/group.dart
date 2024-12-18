@@ -5,22 +5,20 @@ class Group {
   String? description;
   String? creator;
   String? newMemberId;
-  String? newQuizId;
+
   List<String>? date;
   List<String>? members;
-  List<String>? quizzes;
 
-  Group(
-      {this.id,
-      this.creator,
-      required this.invCode,
-      this.name,
-      this.newMemberId,
-      this.newQuizId,
-      this.date,
-      this.description,
-      this.members,
-      this.quizzes});
+  Group({
+    this.id,
+    this.creator,
+    required this.invCode,
+    this.name,
+    this.newMemberId,
+    this.date,
+    this.description,
+    this.members,
+  });
 
   factory Group.fromMap(Map<String, dynamic> data, {String? id}) {
     return Group(
@@ -37,8 +35,6 @@ class Group {
                   : '') // Check for null and provide a default value
               .toList() ??
           [],
-      quizzes:
-          (data['quizzes'] as List<dynamic>?)?.map((e) => e as String).toList(),
     );
   }
 
@@ -50,27 +46,21 @@ class Group {
     List<String>? date,
     String? description,
     List<String>? members,
-    List<String>? quizzes,
     String? newMemberId,
-    String? newQuizId,
   }) {
     List<String> updatedMembers = members ?? this.members ?? [];
     if (newMemberId != null && !updatedMembers.contains(newMemberId)) {
       updatedMembers = List.from(updatedMembers)..add(newMemberId);
     }
-    List<String> updatedQuizzes = quizzes ?? this.quizzes ?? [];
-    if (!updatedQuizzes.contains(newQuizId)) {
-      updatedQuizzes = List.from(updatedQuizzes)..add(newQuizId!);
-    }
     return Group(
-        id: id ?? this.id,
-        invCode: invCode ?? this.invCode,
-        name: name ?? this.name,
-        creator: creator ?? this.creator,
-        date: date ?? this.date,
-        description: description ?? this.description,
-        members: updatedMembers,
-        newMemberId: newMemberId ?? this.newMemberId,
-        quizzes: updatedQuizzes);
+      id: id ?? this.id,
+      invCode: invCode ?? this.invCode,
+      name: name ?? this.name,
+      creator: creator ?? this.creator,
+      date: date ?? this.date,
+      description: description ?? this.description,
+      members: updatedMembers,
+      newMemberId: newMemberId ?? this.newMemberId,
+    );
   }
 }

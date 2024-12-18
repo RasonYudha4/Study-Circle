@@ -1,37 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:study_circle/class/class.dart';
+import 'package:study_circle/class/models/quiz.dart';
 import 'package:study_circle/class/views/pages/pages.dart';
 
-class QuizPage extends StatefulWidget {
-  const QuizPage({super.key});
+class QuizCardage extends StatefulWidget {
+  final Quiz quiz;
+  const QuizCardage({super.key, required this.quiz});
 
   @override
-  _QuizPageState createState() => _QuizPageState();
+  _QuizCardageState createState() => _QuizCardageState();
 }
 
-class _QuizPageState extends State<QuizPage> {
+class _QuizCardageState extends State<QuizCardage> {
   PageController _pageController = PageController();
   int _currentPage = 0;
   String? _selectedOption;
 
-  // Sample questions for demonstration
-  final List<Map<String, dynamic>> _questions = [
-    {
-      "question": "What is the capital of France?",
-      "options": ["A) Paris", "B) London", "C) Berlin", "D) Madrid"],
-    },
-    {
-      "question": "What is 2 + 2?",
-      "options": ["A) 3", "B) 4", "C) 5", "D) 6"],
-    },
-    {
-      "question": "What is the largest planet in our solar system?",
-      "options": ["A) Earth", "B) Mars", "C) Jupiter", "D) Saturn"],
-    },
-    {
-      "question": "What is the boiling point of water?",
-      "options": ["A) 100°C", "B) 90°C", "C) 80°C", "D) 70°C"],
-    },
-  ];
+  late List<Map<String, dynamic>> _questions;
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize questions from the quiz data
+    _questions = widget.quiz.questions.map((q) {
+      return {
+        "question": q.question, // Assuming Question has a title
+        "options": q.options, // Assuming Question has options
+      };
+    }).toList();
+  }
 
   void _goToNextPage() {
     if (_currentPage < _questions.length - 1) {
@@ -81,7 +78,7 @@ class _QuizPageState extends State<QuizPage> {
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
               },
               child: Text("Cancel"),
             ),
@@ -91,7 +88,9 @@ class _QuizPageState extends State<QuizPage> {
                   context,
                   MaterialPageRoute<void>(
                     builder: (BuildContext context) {
-                      return const JoinedClassPage();
+                      return JoinedClassPage(
+                        groupId: widget.quiz.groupId,
+                      );
                     },
                   ),
                 );

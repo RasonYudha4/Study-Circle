@@ -21,9 +21,20 @@ class QuizService {
     try {
       QuerySnapshot snapshot =
           await _quizCollection.where("groupId", isEqualTo: groupId).get();
-      List<Quiz> quizzes = snapshot.docs.map((doc) {
-        return Quiz.fromMap(doc.data() as Map<String, dynamic>);
-      }).toList();
+      List<Quiz> quizzes = [];
+
+      for (var doc in snapshot.docs) {
+        var quizData = doc.data() as Map<String, dynamic>;
+        String documentId = doc.id;
+
+        // Print the document ID and quiz data
+        print('Quiz Document ID: $documentId');
+        print('Quiz Data: $quizData');
+
+        // Create a Quiz object from the data and add it to the list
+        quizzes.add(Quiz.fromMap(quizData,
+            id: documentId)); // Assuming you modify Quiz.fromMap to accept id
+      }
 
       return quizzes;
     } catch (e) {
