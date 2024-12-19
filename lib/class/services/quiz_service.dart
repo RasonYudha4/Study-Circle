@@ -27,13 +27,10 @@ class QuizService {
         var quizData = doc.data() as Map<String, dynamic>;
         String documentId = doc.id;
 
-        // Print the document ID and quiz data
         print('Quiz Document ID: $documentId');
         print('Quiz Data: $quizData');
 
-        // Create a Quiz object from the data and add it to the list
-        quizzes.add(Quiz.fromMap(quizData,
-            id: documentId)); // Assuming you modify Quiz.fromMap to accept id
+        quizzes.add(Quiz.fromMap(quizData, id: documentId));
       }
 
       return quizzes;

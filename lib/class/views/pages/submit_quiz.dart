@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:study_circle/class/class.dart';
 import 'package:study_circle/class/models/quiz.dart';
 import 'package:study_circle/class/views/pages/pages.dart';
@@ -14,20 +15,56 @@ class SubmitQuiz extends StatefulWidget {
 class _SubmitQuizState extends State<SubmitQuiz> {
   PageController _pageController = PageController();
   int _currentPage = 0;
-  String? _selectedOption;
+  Map<int, String?> _selectedOptions = {};
 
   late List<Map<String, dynamic>> _questions;
 
   @override
   void initState() {
     super.initState();
+    _loadSelectedOptions();
 
     _questions = widget.quiz.questions.map((q) {
       return {
         "question": q.question,
         "options": q.options,
+        "correctAnswer": q.correctAnswer
       };
     }).toList();
+  }
+
+  void _calculateScore() {
+    int score = 0;
+    for (int i = 0; i < _questions.length; i++) {
+      if (_selectedOptions[i] == _questions[i]["correctAnswer"]) {
+        score++;
+      }
+    }
+    print('Calculated score: $score');
+    _showScoreDialog(score);
+  }
+
+  void _showScoreDialog(int score) {
+    _showCustomDialog(
+      title: "Your Score",
+      content: "You scored $score out of ${_questions.length}.",
+    );
+  }
+
+  Future<void> _loadSelectedOptions() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    for (int i = 0; i < _questions.length; i++) {
+      String? option = prefs.getString('selected_option_$i');
+      if (option != null) {
+        _selectedOptions[i] = option;
+      }
+    }
+    setState(() {});
+  }
+
+  Future<void> _saveSelectedOption(int questionIndex, String option) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('selected_option_$questionIndex', option);
   }
 
   void _goToNextPage() {
@@ -38,9 +75,7 @@ class _SubmitQuizState extends State<SubmitQuiz> {
         duration: Duration(milliseconds: 300),
         curve: Curves.easeInOut,
       );
-      setState(() {
-        _selectedOption = null;
-      });
+      setState(() {});
     }
   }
 
@@ -52,51 +87,99 @@ class _SubmitQuizState extends State<SubmitQuiz> {
         duration: Duration(milliseconds: 300),
         curve: Curves.easeInOut,
       );
-      setState(() {
-        _selectedOption =
-            null; // Reset selected option when moving to the next question
-      });
+      setState(() {});
     }
   }
 
   void _selectOption(String option) {
     setState(() {
-      _selectedOption = option; // Update the selected option
+      _selectedOptions[_currentPage] = option;
     });
-    // Handle option selection
+    _saveSelectedOption(_currentPage, option);
     print('Selected option: $option for question ${_currentPage + 1}');
   }
 
+  bool _allQuestionsAnswered() {
+    for (int i = 0; i < _questions.length; i++) {
+      if (_selectedOptions[i] == null) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   void _showConfirmationDialog() {
+    if (_allQuestionsAnswered()) {
+      _showCustomDialog(
+        title: "Confirmation",
+        content: "Are you sure you want to submit your answers?",
+        onConfirm: () {
+          Navigator.of(context).pop();
+          _calculateScore();
+        },
+      );
+    } else {
+      _showIncompleteDialog();
+    }
+  }
+
+  void _showIncompleteDialog() {
+    _showCustomDialog(
+      title: "Incomplete",
+      content: "Please answer all questions before submitting.",
+    );
+  }
+
+  void _showCustomDialog(
+      {required String title,
+      required String content,
+      VoidCallback? onConfirm}) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("Confirmation"),
-          content: Text("Are you sure you want to submit your answers?"),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text("Cancel"),
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Container(
+            padding: EdgeInsets.all(20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 20),
+                Text(
+                  content,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 18),
+                ),
+                SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text("Cancel"),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        if (onConfirm != null) {
+                          onConfirm();
+                        }
+                        Navigator.of(context).pop();
+                      },
+                      child: Text("Submit"),
+                    ),
+                  ],
+                ),
+              ],
             ),
-            TextButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute<void>(
-                    builder: (BuildContext context) {
-                      return JoinedClassPage(
-                        groupId: widget.quiz.groupId,
-                      );
-                    },
-                  ),
-                );
-              },
-              child: Text("Submit"),
-            ),
-          ],
+          ),
         );
       },
     );
@@ -193,7 +276,7 @@ class _SubmitQuizState extends State<SubmitQuiz> {
                               height: 180,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(40),
-                                color: _selectedOption == "A"
+                                color: _selectedOptions[_currentPage] == "A"
                                     ? Colors.green
                                     : Color(0xFF10403B),
                               ),
@@ -216,7 +299,7 @@ class _SubmitQuizState extends State<SubmitQuiz> {
                               height: 180,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(40),
-                                color: _selectedOption == "B"
+                                color: _selectedOptions[_currentPage] == "B"
                                     ? Colors.green
                                     : Color(0xFF10403B),
                               ),
@@ -243,7 +326,7 @@ class _SubmitQuizState extends State<SubmitQuiz> {
                               height: 180,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(40),
-                                color: _selectedOption == "C"
+                                color: _selectedOptions[_currentPage] == "C"
                                     ? Colors.green
                                     : Color(0xFF10403B),
                               ),
@@ -266,7 +349,7 @@ class _SubmitQuizState extends State<SubmitQuiz> {
                               height: 180,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(40),
-                                color: _selectedOption == "D"
+                                color: _selectedOptions[_currentPage] == "D"
                                     ? Colors.green
                                     : Color(0xFF10403B),
                               ),
